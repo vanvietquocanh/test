@@ -1,0 +1,8 @@
+version: '3'
+
+services:
+  offertest:
+    image: offertest
+    build:
+      context: .
+      dockerfile: OfferTest/Dockerfile

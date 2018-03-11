@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -32,7 +33,7 @@ namespace OfferTest
             .AddJwtBearer("bearer", options =>
             {
                 options.Authority = "https://localhost:5000"; // URL of Identity Server; use IConfiguration instead of hardcoding 
-                options.Audience = "client.mydomain.com"; // ID of the client application; either hardcoded or configureable via IConfiguration if needed 
+               // options.Audience = "client.mydomain.com"; // ID of the client application; either hardcoded or configureable via IConfiguration if needed 
                 options.RequireHttpsMetadata = true; // require HTTPS (may be disabled in development, but advice against it)
                 options.SaveToken = true; // cache the token for faster authentication
                 options.IncludeErrorDetails = true; // get more details on errors; may be disabled in production 
@@ -43,6 +44,17 @@ namespace OfferTest
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
+
+            app.UseAuthentication();
+            app.UseCors(corsPolicyBuilder =>
+               corsPolicyBuilder.WithOrigins("http://localhost:5000")
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+            );
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

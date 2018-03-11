@@ -1,0 +1,11 @@
+services:
+  offertest:
+    build:
+      context: C:\Users\PC-Nokia\source\repos\OfferTest
+      dockerfile: OfferTest/Dockerfile
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+    image: offertest
+    ports:
+    - 80/tcp
+version: '3.0'

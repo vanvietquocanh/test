@@ -9,14 +9,3 @@ c:\users\pc-nokia\source\repos\OfferTest\OfferTest\obj\Debug\netcoreapp2.0\Offer
 c:\users\pc-nokia\source\repos\OfferTest\OfferTest\bin\Debug\netcoreapp2.0\OfferTest.pdb
 c:\users\pc-nokia\source\repos\OfferTest\OfferTest\obj\Debug\netcoreapp2.0\OfferTest.dll
 c:\users\pc-nokia\source\repos\OfferTest\OfferTest\obj\Debug\netcoreapp2.0\OfferTest.pdb
-C:\Users\PC-Nokia\Desktop\test\bin\Debug\netcoreapp2.0\OfferTest.deps.json
-C:\Users\PC-Nokia\Desktop\test\bin\Debug\netcoreapp2.0\OfferTest.runtimeconfig.json
-C:\Users\PC-Nokia\Desktop\test\bin\Debug\netcoreapp2.0\OfferTest.runtimeconfig.dev.json
-C:\Users\PC-Nokia\Desktop\test\bin\Debug\netcoreapp2.0\OfferTest.dll
-C:\Users\PC-Nokia\Desktop\test\bin\Debug\netcoreapp2.0\OfferTest.pdb
-C:\Users\PC-Nokia\Desktop\test\obj\Debug\netcoreapp2.0\OfferTest.csprojResolveAssemblyReference.cache
-C:\Users\PC-Nokia\Desktop\test\obj\Debug\netcoreapp2.0\OfferTest.csproj.CoreCompileInputs.cache
-C:\Users\PC-Nokia\Desktop\test\obj\Debug\netcoreapp2.0\OfferTest.AssemblyInfoInputs.cache
-C:\Users\PC-Nokia\Desktop\test\obj\Debug\netcoreapp2.0\OfferTest.AssemblyInfo.cs
-C:\Users\PC-Nokia\Desktop\test\obj\Debug\netcoreapp2.0\OfferTest.dll
-C:\Users\PC-Nokia\Desktop\test\obj\Debug\netcoreapp2.0\OfferTest.pdb
