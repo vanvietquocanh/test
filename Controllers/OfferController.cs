@@ -1,31 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
-using System.Web.Http;
-
-using System.Net.Http;
-using Chilkat;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Net;
-using static OfferTest.Func.RequestApi;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace OfferTest.Controllers
 {
-    [Authorize]
-    [RoutePrefix("api/Offer")]
-    public class OfferController : ApiController
+    [Produces("application/json")]
+    [Route("api/Offer")]
+    public class OfferController : Controller
     {
-       
+        // GET: api/Offer
 
         public string Post([FromBody] dataPost data)
         {
-            if(data != null)
+            if (data != null)
             {
-                
+
                 Func.RequestApi func = new OfferTest.Func.RequestApi();
-                string redirectUrl =func.getApp(func.getRedirectUrl(data.Url, data.Os, data.Country));
+                string redirectUrl = func.getApp(func.getRedirectUrl(data.Url, data.Os, data.Country,DateTime.Now));
 
                 return redirectUrl;
             }
@@ -33,64 +27,49 @@ namespace OfferTest.Controllers
 
 
         }
-        public string Get(string url,string os,string country)
+        public class dataPost
         {
-           
-           // string redirectUrl = "{ 'Url': '"+ func.getRedirectUrl(Base64Decode(url), os,country) +"'}";
-          //  return JObject.Parse(redirectUrl);
-          return url;
-        }
+            string url;
+            string os;
+            string country;
 
-        public static string Base64Decode(string base64EncodedData)
-        {
-            var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
-            return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
-        }
-
-
-    }
-   public class dataPost
-    {
-        string url;
-        string os;
-        string country;
-
-        public string Url
-        {
-            get
+            public string Url
             {
-                return url;
+                get
+                {
+                    return url;
+                }
+
+                set
+                {
+                    url = value;
+                }
             }
 
-            set
+            public string Os
             {
-                url = value;
-            }
-        }
+                get
+                {
+                    return os;
+                }
 
-        public string Os
-        {
-            get
-            {
-                return os;
-            }
-
-            set
-            {
-                os = value;
-            }
-        }
-
-        public string Country
-        {
-            get
-            {
-                return country;
+                set
+                {
+                    os = value;
+                }
             }
 
-            set
+            public string Country
             {
-                country = value;
+                get
+                {
+                    return country;
+                }
+
+                set
+                {
+                    country = value;
+                }
             }
         }
     }

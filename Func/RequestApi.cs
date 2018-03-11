@@ -1,20 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using Chilkat;
-using System.Linq;
-using System.Web;
-using Newtonsoft.Json;
-using System.Text.RegularExpressions;
-using System.Net;
+﻿using Chilkat;
 using Newtonsoft.Json.Linq;
-using System.Text;
-using System.IO;
+using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
+using System.Net;
+using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 
 namespace OfferTest.Func
 {
-    public class RequestApi:System.Web.UI.Page
+    public class RequestApi
     {
+        string urlRedirectEnd="";
         string UserAgentIOS = "Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_1 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Mobile/15C153";
         string UserAgentAndroid = "Mozilla/5.0 (Linux; Android 7.0; SM-G930V Build/NRD90M) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.125 Mobile Safari/537.36";
         public string randomUserAgent()
@@ -31,6 +30,22 @@ namespace OfferTest.Func
             }
             return userAgent;
         }
+        public string splitRedirectUrlErr(string strErrRedirect)
+        {
+            string[] arrErr = strErrRedirect.Split(new string[] { "url", "<br>" }, StringSplitOptions.RemoveEmptyEntries);
+            if (arrErr.Length - 1 > 0)
+            {
+                foreach(string url in arrErr)
+                {
+                    string urlRedirectSuccess = getRedirectUrl(url);
+                    if (urlRedirectSuccess != "")
+                    {
+                        return urlRedirectSuccess;
+                    }
+                }
+            }
+            return "";
+        }
         public ModeRequest ChkRequest(string url, string useragent, string socksName, string socksPort)
         {
             Http http = new Http();
@@ -43,6 +58,7 @@ namespace OfferTest.Func
                 http.SocksVersion = 5;
                 http.SocksUsername = "quydaica123";
                 http.SocksPassword = "quydaica";
+
             }
             http.S3Ssl = true;
             http.SslProtocol = "TLS 1.2";
@@ -50,22 +66,23 @@ namespace OfferTest.Func
             success = http.UnlockComponent("ADVRGL.CB1122018_CdZ5Qrc24DmP");
             if (success != true)
             {
-                Console.WriteLine(http.LastErrorText);
+               // Console.WriteLine(http.LastErrorText);
             }
 
             string html;
 
 
             html = http.QuickGetStr(url);
-
+            ModeRequest md = new ModeRequest();
+            md.RedirectSuccees= splitRedirectUrlErr(http.LastErrorHtml);
             if (http.LastMethodSuccess != true)
             {
                 Console.WriteLine("--------------- LastErrorText ------------------");
-                Console.WriteLine(http.LastErrorText);
+              //  Console.WriteLine(http.LastErrorText);
 
             }
 
-            ModeRequest md = new ModeRequest();
+          
             md.Body = http.LastResponseBody;
             md.RedirectUrl = http.FinalRedirectUrl;
             if (http.WasRedirected != true)
@@ -78,7 +95,7 @@ namespace OfferTest.Func
         {
             string body = "";
             string redirectUrl = "";
-
+            string redirectSuccees = "";
             public string Body
             {
                 get
@@ -104,6 +121,8 @@ namespace OfferTest.Func
                     redirectUrl = value;
                 }
             }
+
+            public string RedirectSuccees { get => redirectSuccees; set => redirectSuccees = value; }
         }
         public string getProxy(string countrycode)
         {
@@ -115,7 +134,7 @@ namespace OfferTest.Func
                 return "";
             }
             Chilkat.SshTunnel tunnel = new Chilkat.SshTunnel();
-            
+
             string[] arrSSH = ChkRequest("http://tracking.tracktech.pw/sshapi/?action=read&geo=" + countrycode.ToUpper(), randomUserAgent(), "", "").Body.Split(new string[] { "\r\n" }, StringSplitOptions.None);
             if (arrSSH.Length - 2 > 0)
             {
@@ -126,18 +145,20 @@ namespace OfferTest.Func
                     string sshHostname = arruserSSH[0];
                     int sshPort = 22;
                     tunnel.IdleTimeoutMs = 4000;
+                    tunnel.ConnectTimeoutMs = 4000;
 
                     success = tunnel.Connect(sshHostname, sshPort);
+                   
                     if (success != true)
                     {
-                        //        Console.WriteLine(tunnel.LastErrorText);
+                       
                         goto B1;
                     }
 
                     success = tunnel.AuthenticatePw(arruserSSH[1], arruserSSH[2]);
                     if (success != true)
                     {
-                        //   Console.WriteLine(tunnel.LastErrorText);
+              
                         goto B1;
                     }
 
@@ -163,7 +184,7 @@ namespace OfferTest.Func
             }
 
         }
-        private string IsUrlValid(string str, string start, string end, string os, string countrycode)
+        private string IsUrlValid(string str, string start, string end, string os, string countrycode,DateTime st)
         {
 
             Regex regx = new Regex("https?://([\\w+?\\.\\w+])+([a-zA-Z0-9\\~\\!\\@\\#\\$\\%\\^\\&amp;\\*\\(\\)_\\-\\=\\+\\\\\\/\\?\\.\\:\\;\\{\\}\\[\\]\\'\\,]*)?", RegexOptions.IgnoreCase);
@@ -174,7 +195,7 @@ namespace OfferTest.Func
                 if (start == "http" || start == "https")
                 {
                     string rdURL = "";
-                    rdURL = getRedirectUrl(match.Value, os, countrycode);
+                    rdURL = getRedirectUrl(match.Value, os, countrycode, st);
                     if (rdURL != "")
                     {
                         return rdURL;
@@ -187,7 +208,7 @@ namespace OfferTest.Func
 
         }
 
-        public string regexMatchBody(string str, string start, string end, string os, string countrycode)
+        public string regexMatchBody(string str, string start, string end, string os, string countrycode, DateTime st)
         {
             Console.WriteLine("Regex:" + str + "Start" + start);
             Match match = Regex.Match(str, start + @"([A-Za-z0-9\/?.&%=;{}_-+])" + end);
@@ -201,7 +222,7 @@ namespace OfferTest.Func
 
                     for (int i = 1; i <= match.Groups.Count - 1; i++)
                     {
-                        rdURL = getRedirectUrl(start + match.Groups[i].Value, os, countrycode);
+                        rdURL = getRedirectUrl(start + match.Groups[i].Value, os, countrycode, st);
                         if (rdURL != "")
                         {
                             return rdURL;
@@ -215,10 +236,10 @@ namespace OfferTest.Func
 
 
         }
-        public string geturlBody(string str, string os, string countrycode)
+        public string geturlBody(string str, string os, string countrycode, DateTime st)
         {
             string result = "";
-            result = IsUrlValid(str, "http", "", os, countrycode);
+            result = IsUrlValid(str, "http", "", os, countrycode,st);
             if (result != "Err")
             {
                 return result;
@@ -244,16 +265,23 @@ namespace OfferTest.Func
                 match = Regex.Match(str + "Quy", @"itunes.apple.com([A-Za-z0-9\/?.&%=_-]+)Quy");
                 if (match.Success)
                 {
-                    string key = "Http://itunes.apple.com/" + match.Groups[1].Value;
-                    return key;
+                    if (match.Groups[1].Value.Contains("id"))
+                    {
+                        string key = "Http://itunes.apple.com/" + match.Groups[1].Value;
+                        return key;
+                    }
+                  
                 }
                 else
                 {
                     match = Regex.Match(str + "Quy", @"play.google.com([A-Za-z0-9\/?.&%=_-]+)Quy");
                     if (match.Success)
                     {
-                        string key = "Http://play.google.com" + match.Groups[1].Value;
-                        return key;
+                        if (match.Groups[1].Value.Contains("id"))
+                        {
+                            string key = "Http://play.google.com" + match.Groups[1].Value;
+                            return key;
+                        }
                     }
                     else
                     {
@@ -264,9 +292,9 @@ namespace OfferTest.Func
 
             }
 
-
+            return "";
         }
-        public string getRedirectUrl(string url, string os, string countrycode)
+        public string getRedirectUrl(string url, string os, string countrycode,DateTime startTime)
         {
             string useragent = "";
             switch (os.Trim().ToLower())
@@ -281,10 +309,13 @@ namespace OfferTest.Func
                 Console.WriteLine(array.Length);
                 if (array.Length - 1 == 1)
                 {
-
-
                     B1:
-                    Console.WriteLine("url" + url);
+                    
+                    if (int.Parse(DateTime.Now.Subtract(startTime).TotalSeconds.ToString().Split('.')[0]) > 200)
+                    {
+                        return "";
+                    }
+                        Console.WriteLine("url" + url);
                     if (url.ToLower().Equals("itunes.apple.com/"))
                     {
                         Console.WriteLine("returnurl" + url);
@@ -292,10 +323,14 @@ namespace OfferTest.Func
                     }
 
                     ModeRequest md = ChkRequest(url, useragent, array[0], array[1]);
+                    if(md.RedirectSuccees != "")
+                    {
+                        return md.RedirectSuccees;
+                    }
                     string redirectUrl = md.RedirectUrl;
                     if (redirectUrl != "")
                     {
-                        
+
                         Console.WriteLine("redirectURL" + redirectUrl);
                         if (redirectUrl != "Not RedirectUrl")
                         {
@@ -312,26 +347,28 @@ namespace OfferTest.Func
                         }
                         else
                         {
-                            string body = geturlBody(md.Body, os, countrycode);
+                            string body = geturlBody(md.Body, os, countrycode, startTime);
                             Console.WriteLine("Body" + body);
                             string rdUrl = getRedirectUrl(body);
                             if (rdUrl != "")
-                            {
-                                return rdUrl;
-                            }
-                            else
-                            {
-                                if (body != "")
-                                {
-                                    url = body;
-                                    goto B1;
+                            {                               
+                                    return rdUrl;
                                 }
                                 else
                                 {
-                                    return url;
+                                    if (body != "")
+                                    {
+                                        url = body;
+                                        goto B1;
+                                    }
+                                    else
+                                    {
+                                        return url;
+                                    }
                                 }
-                            }
                         }
+                        
+                        
                     }
 
                 }
@@ -340,8 +377,9 @@ namespace OfferTest.Func
                     return "The proxy does not exist";
                 }
             }
-            return "";
+            return "" ;
         }
+
         public static string GetRandomIp()
         {
             Random random = new Random();
@@ -407,7 +445,7 @@ namespace OfferTest.Func
         }
         public string getApp(string Destination, WebClient client = null)
         {
-          
+
             if (client == null)
             {
                 client = Createclient();
@@ -415,10 +453,10 @@ namespace OfferTest.Func
             try
             {
                 client = new WebClient();
-                
+
                 var values = new NameValueCollection();
                 values["url"] = Destination;
-                    
+
 
                 var response = client.UploadValues("https://rockettraffic.org/checkapplication", values);
 
@@ -438,13 +476,11 @@ namespace OfferTest.Func
             }
             catch (Exception ex)
             {
-           
+
                 return "{'message':'Error'}";
 
             }
 
         }
-      
-
     }
 }
