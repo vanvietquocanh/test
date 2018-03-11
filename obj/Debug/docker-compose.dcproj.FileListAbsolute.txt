@@ -1,1 +1,0 @@
-c:\users\pc-nokia\source\repos\OfferTest\obj\Debug\docker-compose.dcproj.CoreCompileInputs.cache
