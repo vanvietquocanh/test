@@ -502,8 +502,8 @@ namespace OfferTest.Func
                     {
 
                         string NameApp = ((string)jObject["title"]).Trim();
-                        string Icon = ((string)jObject["icon"]).Trim();
-                        string rs = "{ 'NameApp': '" + NameApp + "','Icon': '" + Icon + "'}";
+                        string Icon =  ((string)jObject["icon"]).Trim();
+                        string rs = "{ 'message':'Success' ,'NameApp': '" + NameApp + "','Icon': '" + Icon + "','Url':'" + Destination + "'}";
                         return rs;
                     }
                     return "{'message':'Error' ,'Url':'" + Destination + "'}";
