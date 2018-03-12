@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 
 namespace OfferTest.Controllers
 {
@@ -11,7 +12,7 @@ namespace OfferTest.Controllers
     [Route("api/Offer")]
     public class OfferController : Controller
     {
-        public string Post([FromBody] dataPost data)
+        public JObject Post([FromBody] dataPost data)
         {
             if (data != null)
             {
@@ -19,7 +20,7 @@ namespace OfferTest.Controllers
                 Func.RequestApi func = new OfferTest.Func.RequestApi();
                 string redirectUrl = func.getApp(func.runRedirectURL(data.Url, data.Os, data.Country, DateTime.Now));
 
-                return redirectUrl;
+                return JObject.Parse(redirectUrl);
             }
             return null;
 
