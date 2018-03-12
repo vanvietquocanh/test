@@ -1,11 +1,11 @@
-c:\users\pc-nokia\source\repos\OfferTest\OfferTest\bin\Debug\netcoreapp2.0\OfferTest.deps.json
-c:\users\pc-nokia\source\repos\OfferTest\OfferTest\bin\Debug\netcoreapp2.0\OfferTest.runtimeconfig.json
-c:\users\pc-nokia\source\repos\OfferTest\OfferTest\bin\Debug\netcoreapp2.0\OfferTest.runtimeconfig.dev.json
-c:\users\pc-nokia\source\repos\OfferTest\OfferTest\bin\Debug\netcoreapp2.0\OfferTest.dll
-c:\users\pc-nokia\source\repos\OfferTest\OfferTest\obj\Debug\netcoreapp2.0\OfferTest.csprojResolveAssemblyReference.cache
-c:\users\pc-nokia\source\repos\OfferTest\OfferTest\obj\Debug\netcoreapp2.0\OfferTest.csproj.CoreCompileInputs.cache
-c:\users\pc-nokia\source\repos\OfferTest\OfferTest\obj\Debug\netcoreapp2.0\OfferTest.AssemblyInfoInputs.cache
-c:\users\pc-nokia\source\repos\OfferTest\OfferTest\obj\Debug\netcoreapp2.0\OfferTest.AssemblyInfo.cs
-c:\users\pc-nokia\source\repos\OfferTest\OfferTest\bin\Debug\netcoreapp2.0\OfferTest.pdb
-c:\users\pc-nokia\source\repos\OfferTest\OfferTest\obj\Debug\netcoreapp2.0\OfferTest.dll
-c:\users\pc-nokia\source\repos\OfferTest\OfferTest\obj\Debug\netcoreapp2.0\OfferTest.pdb
+D:\Tool\Project Create C\ASP.net\OfferTest\OfferTest\bin\Debug\netcoreapp2.0\OfferTest.deps.json
+D:\Tool\Project Create C\ASP.net\OfferTest\OfferTest\bin\Debug\netcoreapp2.0\OfferTest.runtimeconfig.json
+D:\Tool\Project Create C\ASP.net\OfferTest\OfferTest\bin\Debug\netcoreapp2.0\OfferTest.runtimeconfig.dev.json
+D:\Tool\Project Create C\ASP.net\OfferTest\OfferTest\bin\Debug\netcoreapp2.0\OfferTest.dll
+D:\Tool\Project Create C\ASP.net\OfferTest\OfferTest\bin\Debug\netcoreapp2.0\OfferTest.pdb
+D:\Tool\Project Create C\ASP.net\OfferTest\OfferTest\obj\Debug\netcoreapp2.0\OfferTest.csproj.CoreCompileInputs.cache
+D:\Tool\Project Create C\ASP.net\OfferTest\OfferTest\obj\Debug\netcoreapp2.0\OfferTest.AssemblyInfoInputs.cache
+D:\Tool\Project Create C\ASP.net\OfferTest\OfferTest\obj\Debug\netcoreapp2.0\OfferTest.AssemblyInfo.cs
+D:\Tool\Project Create C\ASP.net\OfferTest\OfferTest\obj\Debug\netcoreapp2.0\OfferTest.dll
+D:\Tool\Project Create C\ASP.net\OfferTest\OfferTest\obj\Debug\netcoreapp2.0\OfferTest.pdb
+D:\Tool\Project Create C\ASP.net\OfferTest\OfferTest\obj\Debug\netcoreapp2.0\OfferTest.csprojResolveAssemblyReference.cache

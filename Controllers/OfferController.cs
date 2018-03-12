@@ -11,15 +11,13 @@ namespace OfferTest.Controllers
     [Route("api/Offer")]
     public class OfferController : Controller
     {
-        // GET: api/Offer
-
         public string Post([FromBody] dataPost data)
         {
             if (data != null)
             {
 
                 Func.RequestApi func = new OfferTest.Func.RequestApi();
-                string redirectUrl = func.getApp(func.getRedirectUrl(data.Url, data.Os, data.Country,DateTime.Now));
+                string redirectUrl = func.getApp(func.runRedirectURL(data.Url, data.Os, data.Country, DateTime.Now));
 
                 return redirectUrl;
             }

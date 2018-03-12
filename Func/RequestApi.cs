@@ -13,9 +13,10 @@ namespace OfferTest.Func
 {
     public class RequestApi
     {
-        string urlRedirectEnd="";
+        string urlRedirectEnd = "";
         string UserAgentIOS = "Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_1 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Mobile/15C153";
-        string UserAgentAndroid = "Mozilla/5.0 (Linux; Android 7.0; SM-G930V Build/NRD90M) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.125 Mobile Safari/537.36";
+        //   string UserAgentAndroid = "Mozilla/5.0 (Linux; Android 7.0; SM-G930V Build/NRD90M) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.125 Mobile Safari/537.36";
+        string UserAgentAndroid = "Mozilla/5.0 (Linux; Android 7.0; SAMSUNG SM-G950F Build/NRD90M) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Mobile Safari/537.36";
         public string randomUserAgent()
         {
             string userAgent = "Mozilla/5.0 (Linux; Android 7.0; SM-G930V Build/NRD90M) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.125 Mobile Safari/537.36";
@@ -35,7 +36,7 @@ namespace OfferTest.Func
             string[] arrErr = strErrRedirect.Split(new string[] { "url", "<br>" }, StringSplitOptions.RemoveEmptyEntries);
             if (arrErr.Length - 1 > 0)
             {
-                foreach(string url in arrErr)
+                foreach (string url in arrErr)
                 {
                     string urlRedirectSuccess = getRedirectUrl(url);
                     if (urlRedirectSuccess != "")
@@ -66,29 +67,29 @@ namespace OfferTest.Func
             success = http.UnlockComponent("ADVRGL.CB1122018_CdZ5Qrc24DmP");
             if (success != true)
             {
-               // Console.WriteLine(http.LastErrorText);
+                // Console.WriteLine(http.LastErrorText);
             }
 
             string html;
 
-
+            http.FollowRedirects = false;
             html = http.QuickGetStr(url);
             ModeRequest md = new ModeRequest();
-            md.RedirectSuccees= splitRedirectUrlErr(http.LastErrorHtml);
+            md.RedirectSuccees = splitRedirectUrlErr(http.LastErrorHtml);
             if (http.LastMethodSuccess != true)
             {
                 Console.WriteLine("--------------- LastErrorText ------------------");
-              //  Console.WriteLine(http.LastErrorText);
+                //  Console.WriteLine(http.LastErrorText);
 
             }
 
-          
+
             md.Body = http.LastResponseBody;
             md.RedirectUrl = http.FinalRedirectUrl;
-            if (http.WasRedirected != true)
-            {
-                md.RedirectUrl = "Not RedirectUrl";
-            }
+            //if (http.WasRedirected != true)
+            //{
+            //    md.RedirectUrl = "Not RedirectUrl";
+            //}
             return md;
         }
         public class ModeRequest
@@ -124,7 +125,7 @@ namespace OfferTest.Func
 
             public string RedirectSuccees { get => redirectSuccees; set => redirectSuccees = value; }
         }
-        public string getProxy(string countrycode)
+        public string getProxy(string countrycode,DateTime startTime)
         {
             Chilkat.Global chilkatGlob = new Chilkat.Global();
             bool success = chilkatGlob.UnlockBundle("ADVRGL.CB1122018_CdZ5Qrc24DmP");
@@ -139,6 +140,11 @@ namespace OfferTest.Func
             if (arrSSH.Length - 2 > 0)
             {
                 B1:
+                if (int.Parse(DateTime.Now.Subtract(startTime).TotalSeconds.ToString().Split('.')[0]) > 200)
+                {
+                    return "Timeout Connect Proxy";
+                }
+
                 string[] arruserSSH = arrSSH[new Random().Next(0, arrSSH.Length - 2)].Split('|');
                 if (arruserSSH.Length - 1 > 1)
                 {
@@ -148,17 +154,17 @@ namespace OfferTest.Func
                     tunnel.ConnectTimeoutMs = 4000;
 
                     success = tunnel.Connect(sshHostname, sshPort);
-                   
+
                     if (success != true)
                     {
-                       
+
                         goto B1;
                     }
 
                     success = tunnel.AuthenticatePw(arruserSSH[1], arruserSSH[2]);
                     if (success != true)
                     {
-              
+
                         goto B1;
                     }
 
@@ -184,7 +190,7 @@ namespace OfferTest.Func
             }
 
         }
-        private string IsUrlValid(string str, string start, string end, string os, string countrycode,DateTime st)
+        private string IsUrlValid(string str, string os, string countrycode, DateTime st,string[] arr)
         {
 
             Regex regx = new Regex("https?://([\\w+?\\.\\w+])+([a-zA-Z0-9\\~\\!\\@\\#\\$\\%\\^\\&amp;\\*\\(\\)_\\-\\=\\+\\\\\\/\\?\\.\\:\\;\\{\\}\\[\\]\\'\\,]*)?", RegexOptions.IgnoreCase);
@@ -192,54 +198,27 @@ namespace OfferTest.Func
             MatchCollection mactches = regx.Matches(str);
             foreach (Match match in mactches)
             {
-                if (start == "http" || start == "https")
+                if (match.Value.Contains("http"))
                 {
                     string rdURL = "";
-                    rdURL = getRedirectUrl(match.Value, os, countrycode, st);
+                    rdURL = getRedirectUrl(match.Value, os, countrycode, st, arr);
                     if (rdURL != "")
                     {
                         return rdURL;
                     }
-                    return rdURL;
+                  
                 }
-
+                return match.Value;
             }
             return "";
 
         }
 
-        public string regexMatchBody(string str, string start, string end, string os, string countrycode, DateTime st)
-        {
-            Console.WriteLine("Regex:" + str + "Start" + start);
-            Match match = Regex.Match(str, start + @"([A-Za-z0-9\/?.&%=;{}_-+])" + end);
-            if (match.Success)
-            {
-
-                Console.WriteLine("Regex: " + match.Groups.Count);
-                if (start == "http" && match.Groups.Count - 1 == 2 || start == "https" && match.Groups.Count - 1 == 2)
-                {
-                    string rdURL = "";
-
-                    for (int i = 1; i <= match.Groups.Count - 1; i++)
-                    {
-                        rdURL = getRedirectUrl(start + match.Groups[i].Value, os, countrycode, st);
-                        if (rdURL != "")
-                        {
-                            return rdURL;
-                        }
-                    }
-                    return rdURL;
-                }
-                return start + match.Groups[1].Value;
-            }
-            else { return ""; }
-
-
-        }
-        public string geturlBody(string str, string os, string countrycode, DateTime st)
+       
+        public string geturlBody(string str, string os, string countrycode, DateTime st,string[] arr)
         {
             string result = "";
-            result = IsUrlValid(str, "http", "", os, countrycode,st);
+            result = IsUrlValid(str, os, countrycode, st,arr);
             if (result != "Err")
             {
                 return result;
@@ -270,7 +249,7 @@ namespace OfferTest.Func
                         string key = "Http://itunes.apple.com/" + match.Groups[1].Value;
                         return key;
                     }
-                  
+
                 }
                 else
                 {
@@ -294,7 +273,67 @@ namespace OfferTest.Func
 
             return "";
         }
-        public string getRedirectUrl(string url, string os, string countrycode,DateTime startTime)
+
+        public string runRedirectURL(string url, string os, string countrycode, DateTime startTime)
+        {
+
+            B2:
+            if (int.Parse(DateTime.Now.Subtract(startTime).TotalSeconds.ToString().Split('.')[0]) > 200)
+            {
+                return urlendredirect;
+            }
+            string proxy = getProxy(countrycode, startTime);
+
+            if (proxy != "Timeout Connect Proxy")
+            {
+                string[] array = proxy.Split(':');
+                Console.WriteLine(array.Length);
+                if (array.Length - 1 == 1)
+                {
+                    string url1 = getRedirectUrl(url, os, countrycode, startTime, array);
+                    Console.WriteLine("URl END" + url1);
+                    if (url1 != "")
+                    {
+                        return url1;
+                    }
+                    else
+                    {
+                        Console.WriteLine("URl urlendredirect" + urlendredirect);
+                        if (urlendredirect != url)
+                        {
+                            return urlendredirect;
+                        }
+                        else
+                        {
+                            goto B2;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                return "Timeout Connect Proxy";
+            }
+            return "";
+
+        }
+        string urlendredirect = "";
+        public string rcUrl(string url)
+        {
+            int index = url.IndexOf("'");
+            if (index > 0)
+            {
+                return url.Substring(0, index);
+            }
+            index = url.IndexOf("\"");
+            if (index > 0)
+            {
+                return url.Substring(0, index);
+            }
+            return url;
+        }
+
+        public string getRedirectUrl(string url, string os, string countrycode, DateTime startTime,string[] array)
         {
             string useragent = "";
             switch (os.Trim().ToLower())
@@ -304,80 +343,74 @@ namespace OfferTest.Func
             }
             if (useragent != "")
             {
-
-                string[] array = getProxy(countrycode).Split(':');
-                Console.WriteLine(array.Length);
-                if (array.Length - 1 == 1)
-                {
                     B1:
-                    
+                    Console.WriteLine(int.Parse(DateTime.Now.Subtract(startTime).TotalSeconds.ToString().Split('.')[0]));
                     if (int.Parse(DateTime.Now.Subtract(startTime).TotalSeconds.ToString().Split('.')[0]) > 200)
                     {
                         return "";
                     }
-                        Console.WriteLine("url" + url);
+               
                     if (url.ToLower().Equals("itunes.apple.com/"))
                     {
                         Console.WriteLine("returnurl" + url);
                         return url;
                     }
-
+                    if (url == "www.w3.org")
+                    {
+                        return "";
+                    }
+                    url = rcUrl(url);
+                   Console.WriteLine("url " + url);
+                   urlendredirect = url;
                     ModeRequest md = ChkRequest(url, useragent, array[0], array[1]);
-                    if(md.RedirectSuccees != "")
+                    if (md.RedirectSuccees != "")
                     {
                         return md.RedirectSuccees;
                     }
                     string redirectUrl = md.RedirectUrl;
+                   
+                    Console.WriteLine("redirectURL" + redirectUrl);
                     if (redirectUrl != "")
                     {
-
-                        Console.WriteLine("redirectURL" + redirectUrl);
-                        if (redirectUrl != "Not RedirectUrl")
+                        string rdUrl = getRedirectUrl(redirectUrl);
+                        if (rdUrl != "")
                         {
-                            string rdUrl = getRedirectUrl(redirectUrl);
-                            if (rdUrl != "")
-                            {
-                                return rdUrl;
-                            }
-                            else
-                            {
-                                url = redirectUrl;
-                                goto B1;
-                            }
+                            return rdUrl;
                         }
                         else
                         {
-                            string body = geturlBody(md.Body, os, countrycode, startTime);
-                            Console.WriteLine("Body" + body);
-                            string rdUrl = getRedirectUrl(body);
-                            if (rdUrl != "")
-                            {                               
-                                    return rdUrl;
-                                }
-                                else
-                                {
-                                    if (body != "")
-                                    {
-                                        url = body;
-                                        goto B1;
-                                    }
-                                    else
-                                    {
-                                        return url;
-                                    }
-                                }
+                            url = redirectUrl;
+                            goto B1;
                         }
-                        
-                        
+                    }
+                    else
+                    {
+                        string body = geturlBody(md.Body, os, countrycode, startTime,array);
+                        Console.WriteLine("Body" + body);
+                        string rdUrl = getRedirectUrl(body);
+                        if (rdUrl != "")
+                        {
+                            return rdUrl;
+                        }
+                        else
+                        {
+                            if (body != "")
+                            {
+                                url = body;
+                                goto B1;
+                            }
+                            else
+                            {
+                                return "";
+                            }
+                        }
                     }
 
-                }
-                else
-                {
-                    return "The proxy does not exist";
-                }
+
+                    
+
             }
-            return "" ;
+            return "";
         }
 
         public static string GetRandomIp()
@@ -452,32 +485,39 @@ namespace OfferTest.Func
             }
             try
             {
-                client = new WebClient();
-
-                var values = new NameValueCollection();
-                values["url"] = Destination;
-
-
-                var response = client.UploadValues("https://rockettraffic.org/checkapplication", values);
-
-                var responseString = Encoding.Default.GetString(response);
-                JObject jObject = JObject.Parse(responseString);
-
-                if ((string)jObject["message"] != "error")
+                if (Destination != "Timeout Connect Proxy")
                 {
+                    client = new WebClient();
 
-                    string NameApp = ((string)jObject["title"]).Trim();
-                    string Icon = ((string)jObject["icon"]).Trim();
-                    string rs = "{ 'NameApp': '" + NameApp + "','Icon': '" + Icon + "'}";
-                    return rs;
+                    var values = new NameValueCollection();
+                    values["url"] = Destination;
+
+
+                    var response = client.UploadValues("https://rockettraffic.org/checkapplication", values);
+
+                    var responseString = Encoding.Default.GetString(response);
+                    JObject jObject = JObject.Parse(responseString);
+
+                    if ((string)jObject["message"] != "error")
+                    {
+
+                        string NameApp = ((string)jObject["title"]).Trim();
+                        string Icon = ((string)jObject["icon"]).Trim();
+                        string rs = "{ 'NameApp': '" + NameApp + "','Icon': '" + Icon + "'}";
+                        return rs;
+                    }
+                    return "{'message':'Error' ,'Url':'" + Destination + "'}";
                 }
-
-                return "{'message':'Error'}";
+                else
+                {
+                    return "{'message':'"+ Destination + "'}";
+                }
+             
             }
             catch (Exception ex)
             {
 
-                return "{'message':'Error'}";
+                return "{'message':'Error' ,'Url':'" + Destination + "'}";
 
             }
 
