@@ -493,11 +493,12 @@ namespace OfferTest.Func
                     values["url"] = Destination;
 
 
-                    var response = client.UploadValues("https://rockettraffic.org/checkapplication", values);
+                    var response = client.UploadValues("http://rockettraffic.org/checkapplication", values);
 
                     var responseString = Encoding.Default.GetString(response);
                     JObject jObject = JObject.Parse(responseString);
-
+                    Console.WriteLine("Get ICON "+responseString);
+                    Console.WriteLine("Message" + (string)jObject["message"]);
                     if ((string)jObject["message"] != "error")
                     {
 
