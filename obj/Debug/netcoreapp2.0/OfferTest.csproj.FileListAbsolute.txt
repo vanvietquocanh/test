@@ -8,3 +8,4 @@ D:\Tool\Project Create C\ASP.net\OfferTest\OfferTest\obj\Debug\netcoreapp2.0\Off
 D:\Tool\Project Create C\ASP.net\OfferTest\OfferTest\obj\Debug\netcoreapp2.0\OfferTest.AssemblyInfo.cs
 D:\Tool\Project Create C\ASP.net\OfferTest\OfferTest\obj\Debug\netcoreapp2.0\OfferTest.dll
 D:\Tool\Project Create C\ASP.net\OfferTest\OfferTest\obj\Debug\netcoreapp2.0\OfferTest.pdb
+D:\Tool\Project Create C\ASP.net\OfferTest\OfferTest\obj\Debug\netcoreapp2.0\OfferTest.csprojResolveAssemblyReference.cache

@@ -12,17 +12,27 @@ namespace OfferTest.Controllers
     [Route("api/Offer")]
     public class OfferController : Controller
     {
+        string[] arr = new string[] { "au", "kr", "de", "in", "id", "tw", "jp", "vn", "th", "br", "es", "tr", "ru", "fr", "sa", "ae", "kw", "mx", "cn", "us", "gb"};
         public JObject Post([FromBody] dataPost data)
         {
+
             if (data != null)
             {
+                if (arr.Contains(data.Country.ToLower()))
+                {
+                    //Func.RequestApi func = new OfferTest.Func.RequestApi();
+                    //string redirectUrl = func.getApp(func.runRedirectURL(data.Url, data.Os, data.Country, DateTime.Now));
+                    Func.RequestApiOffer func = new OfferTest.Func.RequestApiOffer();
+                    string redirectUrl = func.getApp(func.runRedirectURL(data.Url, data.Os, data.Country.ToLower(), DateTime.Now));
+                    return JObject.Parse(redirectUrl);
+                }
+                else
+                {
+                    return JObject.Parse("{\"message\": \"Country Not Found\"}"); ;
+                }
 
-                Func.RequestApi func = new OfferTest.Func.RequestApi();
-                string redirectUrl = func.getApp(func.runRedirectURL(data.Url, data.Os, data.Country, DateTime.Now));
-
-                return JObject.Parse(redirectUrl);
             }
-            return null;
+            return JObject.Parse("{\"message\": \"Error\"}"); ;
 
 
         }
