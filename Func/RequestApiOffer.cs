@@ -98,19 +98,20 @@ namespace OfferTest.Func
             }
             return "";
         }
-        public ModeRequest ChkRequest(string url, string useragent, string socksName, string socksPort)
+        public ModeRequest ChkRequest(string url, string useragent, string socksName, string socksPort,string username,string password)
         {
             Http http = new Http();
             bool success;
             http.SetRequestHeader("User-Agent", useragent);
+          //  Console.WriteLine(username + "----" + password);
             if (socksName != "" && socksPort != "")
             {
                 http.SocksHostname = socksName;//"62.210.220.176"; 
                 http.SocksPort = int.Parse(socksPort);// 4277; 
                 http.SocksVersion = 5;
-                http.SocksUsername = "quydaica123";
-                http.SocksPassword = "quydaica";
-
+                http.SocksUsername = username;
+                http.SocksPassword = password;
+                
             }
             http.S3Ssl = true;
             http.SslProtocol = "TLS 1.2";
@@ -128,11 +129,11 @@ namespace OfferTest.Func
             
             html = http.QuickGetStr(url);
             ModeRequest md = new ModeRequest();
-
+          //  Console.WriteLine(http.LastErrorText);
             if (http.LastMethodSuccess != true)
             {
                 Console.WriteLine("--------------- LastErrorText ------------------");
-                //  Console.WriteLine(http.LastErrorText);
+             
 
             }
             Console.WriteLine("============================================== Begin =============================================");
@@ -177,7 +178,7 @@ namespace OfferTest.Func
         public string getProxy(string countryCode)
         {
             Console.WriteLine("Country Code:"+countryCode);
-            string jsonUrl = "http://128.199.163.213/get/port?country=" + countryCode.ToLower();
+            string jsonUrl = "http://rockettraffic.org/get/port?country=" + countryCode.ToLower();
             WebRequest request = WebRequest.Create(jsonUrl);
             request.Method = "GET";
             request.ContentType = "application/json; charset=utf-8";
@@ -377,7 +378,7 @@ namespace OfferTest.Func
             }
             return url;
         }
-
+        int demurl = 0;
         public string getRedirectUrl(string url, string os, string countrycode, DateTime startTime, string[] array)
         {
             string useragent = "";
@@ -408,13 +409,30 @@ namespace OfferTest.Func
                 {
                     return urlfirst;
                 }
+                if (url.ToLower().Contains("ogp.me"))
+                {
+                    return urlfirst;
+                }
                 url = rcUrl(url);
+                demurl++;
                 urlfirst = url;
                 Console.WriteLine("============================================== End =============================================");
                 Console.WriteLine("url " + url);
 
                 urlendredirect = url;
-                ModeRequest md = ChkRequest(url, useragent, array[0], array[1]);
+                string username = "";
+                string pass = "";
+                if (countrycode.ToLower().Trim().Equals("us") || countrycode.ToLower().Trim().Equals("gb"))
+                {
+                    username = "tieuhuy";
+                    pass = "anhhuydeptrai1";
+                }
+                else
+                {
+                    username = "quydaica123";
+                    pass = "quydaica";
+                }
+                ModeRequest md = ChkRequest(url, useragent, array[0], array[1],username,pass);
       
                 string redirectUrl = md.RedirectUrl;
 
@@ -552,21 +570,21 @@ namespace OfferTest.Func
 
                         string NameApp = ((string)jObject["title"]).Trim();
                         string Icon = ((string)jObject["icon"]).Trim();
-                        string rs = "{ 'message':'Success' ,'NameApp': '" + NameApp + "','Icon': '" + Icon + "','Url':'" + Destination + "'}" ;
+                        string rs = "{ 'message':'Success' ,'NameApp': '" + NameApp + "','Icon': '" + Icon + "','Url':'" + Destination + "','Count': '" + demurl + "'}" ;
                         return rs;
                     }
-                    return "{'message':'Error' ,'Url':'" + Destination + "'}";
+                    return "{'message':'Error' ,'Url':'" + Destination + "','Count': '" + demurl + "'}";
                 }
                 else
                 {
-                    return "{'message':'" + Destination + "'}";
+                    return "{'message':'Error' ,'Url':'" + Destination + "','Count': '" + demurl + "'}";
                 }
 
             }
             catch 
             {
 
-                return "{'message':'Error' ,'Url':'" + Destination + "'}";
+                return "{'message':'Error' ,'Url':'" + Destination + "','Count': '" + demurl + "'}";
 
             }
 
