@@ -12,7 +12,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
-using System.IO;
+
 
 
 namespace OfferTest.Func
@@ -132,29 +132,31 @@ namespace OfferTest.Func
           //  Console.WriteLine(http.LastErrorText);
             if (http.LastMethodSuccess != true)
             {
-                Console.WriteLine("--------------- LastErrorText ------------------");
+             //   Console.WriteLine("--------------- LastErrorText ------------------");
              
 
             }
-            Console.WriteLine("============================================== Begin =============================================");
+           // Console.WriteLine("============================================== Begin =============================================");
           //  Console.WriteLine("LastResponseHeader: " + http.LastResponseHeader);
-            foreach (string header in http.LastResponseHeader.Split(new string[] { "\n" }, StringSplitOptions.None))
-            {
+            //foreach (string header in http.LastResponseHeader.Split(new string[] { "\n" }, StringSplitOptions.None))
+            //{
                 
               
-                if (header.ToLower().Contains("location"))
-                {
+            //    if (header.ToLower().Contains("location"))
+            //    {
                    
-                    md.Urllocation = header.Replace("Location: ", "");
-                }
-            }
-       //     Console.WriteLine("LastHeader: " + http.LastHeader);
+            //        md.Urllocation = header.Replace("Location: ", "");
+            //    }
+            //}
+       //   Console.WriteLine("LastHeader: " + http.LastHeader);
             md.Body = http.LastResponseBody;
             md.RedirectUrl = http.FinalRedirectUrl;
-            Console.WriteLine("Localtion: " + md.Urllocation);
-            Console.WriteLine("============================================== Begin =============================================");
-            Console.WriteLine("Body: " + md.Body);
-            Console.WriteLine("RedirectUrl: " + md.RedirectUrl);
+            //Console.WriteLine("Localtion: " + md.Urllocation);
+            //Console.WriteLine("============================================== Begin =============================================");
+            //Console.WriteLine("Body: " + md.Body);
+            //Console.WriteLine("RedirectUrl: " + md.RedirectUrl);
+            http.CloseAllConnections();
+            http.CloseAllConnectionsAsync();
             return md;
         }
         public string getssh(string url)
@@ -167,17 +169,22 @@ namespace OfferTest.Func
                 using (System.IO.StreamReader sr = new System.IO.StreamReader(s))
                 {
                     jsonResponse = sr.ReadToEnd();
-                    //  Console.WriteLine(String.Format("Response: {0}", jsonResponse));
+
                 }
             }
-
+            try
+            {
+                myRequest.Abort();
+            }
+            catch { }
+    
             return jsonResponse;
         }
 
 
         public string getProxy(string countryCode)
         {
-            Console.WriteLine("Country Code:"+countryCode);
+          
             string jsonUrl = "http://rockettraffic.org/get/port?country=" + countryCode.ToLower();
             WebRequest request = WebRequest.Create(jsonUrl);
             request.Method = "GET";
@@ -187,6 +194,11 @@ namespace OfferTest.Func
             StreamReader reader = new StreamReader(stream, Encoding.UTF8);
             String responseString = reader.ReadToEnd();
             var data = (JObject)JsonConvert.DeserializeObject(responseString);
+            try
+            {
+                request.Abort();
+            }
+            catch { }
             return data[countryCode].ToString();
         }
         //    public string getProxy(string countrycode, DateTime startTime)
@@ -322,19 +334,20 @@ namespace OfferTest.Func
 
             return "";
         }
-
+        
         public string runRedirectURL(string url, string os, string countrycode, DateTime startTime)
         {
-
-
-            Thread.Sleep(5000);
-            if (int.Parse(DateTime.Now.Subtract(startTime).TotalSeconds.ToString().Split('.')[0]) > 200)
+         
+            string proxy = "Timeout Connect Proxy";
+            foreach (Func.CountryProxy cProxy in Func.Static.lsCountryProxy)
             {
-                return url;
+                if (cProxy.Country.ToLower().Trim() == countrycode.ToLower().Trim())
+                {
+                    proxy= cProxy.Proxy;
+                }
             }
-
-            string proxy = getProxy(countrycode); //"62.210.220.176:4274";
-            Console.WriteLine("Proxy:" + proxy);
+             // getProxy(countrycode); //"62.210.220.176:4274";
+             Console.WriteLine("Proxy:" + proxy);
             if (proxy != "Timeout Connect Proxy")
             {
                 string[] array = proxy.Split(':');
@@ -391,6 +404,7 @@ namespace OfferTest.Func
             {
                 string urlfirst = "";
                 B1:
+                Thread.Sleep(2000);
                 Console.WriteLine(int.Parse(DateTime.Now.Subtract(startTime).TotalSeconds.ToString().Split('.')[0]));
                 if (int.Parse(DateTime.Now.Subtract(startTime).TotalSeconds.ToString().Split('.')[0]) > 200)
                 {
@@ -573,17 +587,31 @@ namespace OfferTest.Func
                         string rs = "{ 'message':'Success' ,'NameApp': '" + NameApp + "','Icon': '" + Icon + "','Url':'" + Destination + "','Count': '" + demurl + "'}" ;
                         return rs;
                     }
+                    try
+                    {
+                        client.Dispose();
+                    }
+                    catch { }
                     return "{'message':'Error' ,'Url':'" + Destination + "','Count': '" + demurl + "'}";
                 }
                 else
                 {
+                    try
+                    {
+                        client.Dispose();
+                    }
+                    catch { }
                     return "{'message':'Error' ,'Url':'" + Destination + "','Count': '" + demurl + "'}";
                 }
 
             }
             catch 
             {
-
+                try
+                {
+                    client.Dispose();
+                }
+                catch { }
                 return "{'message':'Error' ,'Url':'" + Destination + "','Count': '" + demurl + "'}";
 
             }

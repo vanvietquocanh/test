@@ -14,7 +14,7 @@ namespace OfferTest.Func
 {
     public class RequestApi
     {
-        string urlRedirectEnd = "";
+     
         string UserAgentIOS = "Mozilla/5.0 (iPhone; CPU iPhone OS 11_2_1 like Mac OS X) AppleWebKit/604.4.7 (KHTML, like Gecko) Mobile/15C153";
         //   string UserAgentAndroid = "Mozilla/5.0 (Linux; Android 7.0; SM-G930V Build/NRD90M) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.125 Mobile Safari/537.36";
         string UserAgentAndroid = "Mozilla/5.0 (Linux; Android 7.0; SAMSUNG SM-G950F Build/NRD90M) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.106 Mobile Safari/537.36";
@@ -535,7 +535,7 @@ namespace OfferTest.Func
                 }
              
             }
-            catch (Exception ex)
+            catch 
             {
 
                 return "{'message':'Error' ,'Url':'" + Destination + "'}";

@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,68 +17,51 @@ namespace OfferTest.Controllers
     [Route("api/Offer")]
     public class OfferController : Controller
     {
-        string[] arr;
+
         public JObject Post([FromBody] dataPost data)
         {
-            arr = getCountry();
-            if (arr != null)
+            Thread.Sleep(1000);
+            if (data != null)
             {
-                if (data != null)
+                string bl = Post(data.User, data.Pass, data.Ipaddress);
+                Console.WriteLine(data.User + "--" + data.Pass + "--" + data.Ipaddress+"---"+ bl);
+                if (bl.ToLower() == "true")
                 {
-                    string bl = Post(data.User, data.Pass, data.Ipaddress);
-                    Console.WriteLine(data.User + "--" + data.Pass + "--" + data.Ipaddress+"---"+ bl);
-                    if (bl.ToLower() == "true")
-                    {
-                        if (arr.Contains(data.Country.ToLower()))
+                    if (Func.Static.arrCountry != null) {
+                        if (Func.Static.arrCountry.Contains(data.Country.ToLower()))
                         {
                             Func.RequestApiOffer func = new OfferTest.Func.RequestApiOffer();
-                            string redirectUrl = func.getApp(func.runRedirectURL(data.Url, data.Os, data.Country.ToLower(), DateTime.Now));
+                            string redirectUrl = "{\"url\": \"" +func.runRedirectURL(data.Url, data.Os, data.Country.ToLower(), DateTime.Now)+"\"}";
+                         
                             return JObject.Parse(redirectUrl);
                         }
                         else
                         {
+                        
                             return JObject.Parse("{\"message\": \"Country Not Found\"}"); ;
                         }
                     }
                     else
                     {
-                        return JObject.Parse("{\"message\": \"Dua Zoi Bo\"}"); ;
+                      
+                        return JObject.Parse("{\"message\": \"Error\"}");
                     }
                 }
                 else
                 {
-                    return JObject.Parse("{\"message\": \"Data Post Error\"}");
+                  
+                    return JObject.Parse("{\"message\": \"Dua Zoi Bo\"}"); ;
                 }
             }
             else
             {
-                return JObject.Parse("{\"message\": \"Get Country Error\"}");
+              
+                return JObject.Parse("{\"message\": \"Data Post Error\"}");
             }
+
           
         }
-        public static string[] getCountry()
-        {
-            string jsonUrl = host + "/getcountry";
-            try
-            {
-                WebRequest request = WebRequest.Create(jsonUrl);
-                request.Method = "GET";
-                //   request.ContentType = "application/json; charset=utf-8";
-                var response = (HttpWebResponse)request.GetResponse();
-                System.IO.Stream stream = response.GetResponseStream();
-                StreamReader reader = new StreamReader(stream, Encoding.UTF8);
-                string responseString = reader.ReadToEnd();
-                var data = (JObject)JsonConvert.DeserializeObject(responseString);
-      
-                return data["country"].ToString().Split(',');
-            }
-            catch
-            {
-                return null;
-            }
 
-
-        }
         public static string host = "http://rockettraffic.org";//"http://128.199.163.213";
         public static string Post(string user, string pass, string ipadress)
         {
@@ -106,6 +90,7 @@ namespace OfferTest.Controllers
                 var response = (HttpWebResponse)request.GetResponse();
 
                 var responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
+                request.Abort();
              //   Console.WriteLine("CheckSTT"+responseString);
                 return responseString;
             }
