@@ -25,6 +25,20 @@ namespace OfferTest.Func
             string redirectUrl = "";
             string redirectSuccees = "";
             string urllocation = "";
+
+            string status = "";
+            public string Status
+            {
+                get
+                {
+                    return status;
+                }
+
+                set
+                {
+                    status = value;
+                }
+            }
             public string Body
             {
                 get
@@ -98,66 +112,79 @@ namespace OfferTest.Func
             }
             return "";
         }
-        public ModeRequest ChkRequest(string url, string useragent, string socksName, string socksPort,string username,string password)
+        Http http = new Http();
+   
+        public ModeRequest ChkRequest(string url, string useragent, string socksName, string socksPort,string username,string password,DateTime startTime)
         {
-            Http http = new Http();
-            bool success;
-            http.SetRequestHeader("User-Agent", useragent);
-          //  Console.WriteLine(username + "----" + password);
-            if (socksName != "" && socksPort != "")
-            {
-                http.SocksHostname = socksName;//"62.210.220.176"; 
-                http.SocksPort = int.Parse(socksPort);// 4277; 
-                http.SocksVersion = 5;
-                http.SocksUsername = username;
-                http.SocksPassword = password;
-                
-            }
-            http.S3Ssl = true;
-            http.SslProtocol = "TLS 1.2";
-
-            success = http.UnlockComponent("ADVRGL.CB1122018_CdZ5Qrc24DmP");
-            if (success != true)
-            {
-                // Console.WriteLine(http.LastErrorText);
-            }
-
-            string html;
-            http.SaveCookies = true;
-            http.SendCookies = true;
-            http.FollowRedirects = false;
-            
-            html = http.QuickGetStr(url);
             ModeRequest md = new ModeRequest();
-          //  Console.WriteLine(http.LastErrorText);
-            if (http.LastMethodSuccess != true)
-            {
-             //   Console.WriteLine("--------------- LastErrorText ------------------");
-             
 
-            }
-           // Console.WriteLine("============================================== Begin =============================================");
-          //  Console.WriteLine("LastResponseHeader: " + http.LastResponseHeader);
-            //foreach (string header in http.LastResponseHeader.Split(new string[] { "\n" }, StringSplitOptions.None))
-            //{
-                
+            try
+            {
+                http.SetRequestHeader("User-Agent", useragent);
+                Brq:
+                if (int.Parse(DateTime.Now.Subtract(startTime).TotalSeconds.ToString().Split('.')[0]) > 200)
+                {
+                    md.Status = "timeout";
+                    return md;
+                }
+                if (!checkProxyLive(socksName, socksPort, username, password))
+                {
+                    Thread.Sleep(5000);
+                    goto Brq;
+                }
+                //  Console.WriteLine(username + "----" + password);
+                if (socksName != "" && socksPort != "")
+                {
+                    http.SocksHostname = socksName;//"62.210.220.176"; 
+                    http.SocksPort = int.Parse(socksPort);// 4277; 
+                    http.SocksVersion = 5;
+                    http.SocksUsername = username;
+                    http.SocksPassword = password;
+
+                }
+                http.S3Ssl = true;
+                http.SslProtocol = "TLS 1.2";
+
               
-            //    if (header.ToLower().Contains("location"))
-            //    {
-                   
-            //        md.Urllocation = header.Replace("Location: ", "");
-            //    }
-            //}
-       //   Console.WriteLine("LastHeader: " + http.LastHeader);
-            md.Body = http.LastResponseBody;
-            md.RedirectUrl = http.FinalRedirectUrl;
-            //Console.WriteLine("Localtion: " + md.Urllocation);
-            //Console.WriteLine("============================================== Begin =============================================");
-            //Console.WriteLine("Body: " + md.Body);
-            //Console.WriteLine("RedirectUrl: " + md.RedirectUrl);
-            http.CloseAllConnections();
-            http.CloseAllConnectionsAsync();
-            return md;
+
+                string html;
+                http.SaveCookies = true;
+                http.SendCookies = true;
+                http.FollowRedirects = false;
+                Thread.Sleep(new Random().Next(2, 5) * 1000);
+                html = http.QuickGetStr(url);
+
+                //  Console.WriteLine(http.LastErrorText);
+                if (http.LastMethodSuccess != true)
+                {
+                    //   Console.WriteLine("--------------- LastErrorText ------------------");
+
+
+                }
+                // Console.WriteLine("============================================== Begin =============================================");
+                //  Console.WriteLine("LastResponseHeader: " + http.LastResponseHeader);
+                //foreach (string header in http.LastResponseHeader.Split(new string[] { "\n" }, StringSplitOptions.None))
+                //{
+
+
+                //    if (header.ToLower().Contains("location"))
+                //    {
+
+                //        md.Urllocation = header.Replace("Location: ", "");
+                //    }
+                //}
+                //   Console.WriteLine("LastHeader: " + http.LastHeader);
+                md.Body = http.LastResponseBody;
+                md.RedirectUrl = http.FinalRedirectUrl;
+                //Console.WriteLine("Localtion: " + md.Urllocation);
+                //Console.WriteLine("============================================== Begin =============================================");
+                //Console.WriteLine("Body: " + md.Body);
+                //Console.WriteLine("RedirectUrl: " + md.RedirectUrl);
+                http.CloseAllConnections();
+                http.CloseAllConnectionsAsync();
+                return md;
+            }
+            catch { return md; }
         }
         public string getssh(string url)
         {
@@ -180,26 +207,32 @@ namespace OfferTest.Func
     
             return jsonResponse;
         }
-
-
+        // "http://128.199.163.213";
+        string hostApi = "http://rockettraffic.org";
         public string getProxy(string countryCode)
         {
-          
-            string jsonUrl = "http://rockettraffic.org/get/port?country=" + countryCode.ToLower();
-            WebRequest request = WebRequest.Create(jsonUrl);
-            request.Method = "GET";
-            request.ContentType = "application/json; charset=utf-8";
-            var response = (HttpWebResponse)request.GetResponse();
-            System.IO.Stream stream = response.GetResponseStream();
-            StreamReader reader = new StreamReader(stream, Encoding.UTF8);
-            String responseString = reader.ReadToEnd();
-            var data = (JObject)JsonConvert.DeserializeObject(responseString);
             try
             {
-                request.Abort();
+                string jsonUrl = hostApi+ "/get/port?country=" + countryCode.ToLower();
+                WebRequest request = WebRequest.Create(jsonUrl);
+                request.Method = "GET";
+                request.ContentType = "application/json; charset=utf-8";
+                var response = (HttpWebResponse)request.GetResponse();
+                System.IO.Stream stream = response.GetResponseStream();
+                StreamReader reader = new StreamReader(stream, Encoding.UTF8);
+                String responseString = reader.ReadToEnd();
+                var data = (JObject)JsonConvert.DeserializeObject(responseString);
+                try
+                {
+                    request.Abort();
+                }
+                catch { }
+                return data[countryCode].ToString();
             }
-            catch { }
-            return data[countryCode].ToString();
+            catch
+            {
+                return "";
+            }
         }
         //    public string getProxy(string countrycode, DateTime startTime)
         //{
@@ -334,41 +367,100 @@ namespace OfferTest.Func
 
             return "";
         }
-        
-        public string runRedirectURL(string url, string os, string countrycode, DateTime startTime)
+        public bool checkProxyLive(string ip, string port, string user, string pass)
         {
-         
-            string proxy = "Timeout Connect Proxy";
-            foreach (Func.CountryProxy cProxy in Func.Static.lsCountryProxy)
+            try
             {
-                if (cProxy.Country.ToLower().Trim() == countrycode.ToLower().Trim())
+                Http http1 = new Http();
+                bool success;
+                if (ip != "" && port != "")
                 {
-                    proxy= cProxy.Proxy;
-                }
-            }
-             // getProxy(countrycode); //"62.210.220.176:4274";
-             Console.WriteLine("Proxy:" + proxy);
-            if (proxy != "Timeout Connect Proxy")
-            {
-                string[] array = proxy.Split(':');
-                Console.WriteLine(array.Length);
-                if (array.Length - 1 == 1)
-                {
-                    string url1 = getRedirectUrl(url, os, countrycode, startTime, array);
-                    Console.WriteLine("URl END" + url1);
-                    if (url1 != "")
-                    {
-                        return url1;
-                    }
-                 
+                    http1.SocksHostname = ip;//"62.210.220.176"; 
+                    http1.SocksPort = int.Parse(port);// 4277; 
+                    http1.SocksVersion = 5;
+                    http1.SocksUsername = user;
+                    http1.SocksPassword = pass;
 
                 }
+                http1.S3Ssl = true;
+                http1.SslProtocol = "TLS 1.2";
+
+                success = http1.UnlockComponent("ADVRGL.CB1122018_CdZ5Qrc24DmP");
+                if (success != true)
+                {
+
+                }
+
+                string html;
+                http1.SaveCookies = true;
+                http1.SendCookies = true;
+                http1.FollowRedirects = false;
+
+                html = http1.QuickGetStr("http://google.com");
+                Console.WriteLine("Proxy:"+http1.LastMethodSuccess);
+
+                if (http1.LastMethodSuccess != true)
+                {
+           
+                    return http1.LastMethodSuccess;
+                    // Console.WriteLine(http.LastErrorText);
+
+                }
+                http1.CloseAllConnections();
+                http1.CloseAllConnectionsAsync();
+                return http1.LastMethodSuccess;
             }
-            else
+            catch
             {
-                return "Timeout Connect Proxy";
+                return false;
             }
-            return url;
+        }
+        public string runRedirectURL(string url, string os, string countrycode, DateTime startTime)
+        {
+            try
+            {
+               bool success = http.UnlockComponent("ADVRGL.CB1122018_CdZ5Qrc24DmP");
+                if (success != true)
+                {
+                    // Console.WriteLine(http.LastErrorText);
+                }
+                string proxy = "Timeout Connect Proxy";
+                foreach (Func.CountryProxy cProxy in Func.Static.lsCountryProxy)
+                {
+                    if (cProxy.Country.ToLower().Trim() == countrycode.ToLower().Trim())
+                    {
+                        proxy = cProxy.Proxy;
+                    }
+                }
+                // getProxy(countrycode); //"62.210.220.176:4274";
+                Console.WriteLine("Proxy:" + proxy);
+                if (proxy != "Timeout Connect Proxy")
+                {
+                    //  string[] arr = proxy.Split(':');
+                    // Console.WriteLine(checkProxyLive(arr[0],arr[1],"tieuhuy","anhhuydeptrai1"));
+                    string[] array = proxy.Split(':');
+                    Console.WriteLine(array.Length);
+                    if (array.Length - 1 == 1)
+                    {
+                        string url1 = getRedirectUrl(url, os, countrycode, startTime, array);
+                        Console.WriteLine("URl END" + url1);
+                        if (url1 != "")
+                        {
+                            return "{\"message\": \""+ url1 + "\",\"Count\": \""+ demurl + "\",\"TimeOut\": \"false\"}";
+                        }
+                    }
+                }
+                else
+                
+                {
+                    return "{\"message\": \"" + url + "\",\"Count\": \"" + demurl + "\",\"TimeOut\": \"true\"}";
+                }
+                return "{\"message\": \"" + url + "\",\"Count\": \"" + demurl + "\",\"TimeOut\": \"false\"}";
+            }
+            catch
+            {
+                return "{\"message\": \"" + url + "\",\"Count\": \"" + demurl + "\",\"TimeOut\": \"false\"}";
+            }
 
         }
         string urlendredirect = "";
@@ -394,105 +486,105 @@ namespace OfferTest.Func
         int demurl = 0;
         public string getRedirectUrl(string url, string os, string countrycode, DateTime startTime, string[] array)
         {
-            string useragent = "";
-            switch (os.Trim().ToLower())
+            try
             {
-                case "ios": useragent = UserAgentIOS; break;
-                case "android": useragent = UserAgentAndroid; break;
-            }
-            if (useragent != "")
-            {
-                string urlfirst = "";
-                B1:
-                Thread.Sleep(2000);
-                Console.WriteLine(int.Parse(DateTime.Now.Subtract(startTime).TotalSeconds.ToString().Split('.')[0]));
-                if (int.Parse(DateTime.Now.Subtract(startTime).TotalSeconds.ToString().Split('.')[0]) > 200)
+                string useragent = "";
+                switch (os.Trim().ToLower())
                 {
-                    return url;
+                    case "ios": useragent = UserAgentIOS; break;
+                    case "android": useragent = UserAgentAndroid; break;
                 }
+                if (useragent != "")
+                {
+                    string urlfirst = "";
+                    B1:
+                 
+                  //  Console.WriteLine(int.Parse(DateTime.Now.Subtract(startTime).TotalSeconds.ToString().Split('.')[0]));
+                    if (int.Parse(DateTime.Now.Subtract(startTime).TotalSeconds.ToString().Split('.')[0]) > 200)
+                    {
+                        return url + "-timeout";
+                    }
 
-                if (url.ToLower().Contains("itunes.apple.com/"))
-                {
-                    if (url.ToLower().Contains("id"))
+                    if (url.ToLower().Contains("itunes.apple.com/"))
                     {
-                        Console.WriteLine("returnurl" + url);
-                        return url;
-                    }
-                }
-                if (url.ToLower().Contains("w3.org"))
-                {
-                    return urlfirst;
-                }
-                if (url.ToLower().Contains("ogp.me"))
-                {
-                    return urlfirst;
-                }
-                url = rcUrl(url);
-                demurl++;
-                urlfirst = url;
-                Console.WriteLine("============================================== End =============================================");
-                Console.WriteLine("url " + url);
-
-                urlendredirect = url;
-                string username = "";
-                string pass = "";
-                if (countrycode.ToLower().Trim().Equals("us") || countrycode.ToLower().Trim().Equals("gb"))
-                {
-                    username = "tieuhuy";
-                    pass = "anhhuydeptrai1";
-                }
-                else
-                {
-                    username = "quydaica123";
-                    pass = "quydaica";
-                }
-                ModeRequest md = ChkRequest(url, useragent, array[0], array[1],username,pass);
-      
-                string redirectUrl = md.RedirectUrl;
-
-                Console.WriteLine("redirectURL " + redirectUrl);
-                if (redirectUrl != "")
-                {
-                    string rdUrl = IsUrlSuccess(redirectUrl);
-                    if (rdUrl != "")
-                    {
-                        return rdUrl;
-                    }
-                    else
-                    {
-                        url = redirectUrl;
-                        goto B1;
-                    }
-                }
-                else
-                {
-                    string body = IsUrlValid(md.Body);
-                    Console.WriteLine("Body " + body);
-                    Console.WriteLine("============================================== End =============================================");
-                    string rdUrl = IsUrlSuccess(body);
-                    if (rdUrl != "")
-                    {
-                        return rdUrl;
-                    }
-                    else
-                    {
-                        if (body != "")
+                        if (url.ToLower().Contains("id"))
                         {
-                            url = body;
-                            goto B1;
-                        }
-                        else
-                        {
+                            Console.WriteLine("returnurl" + url);
                             return url;
                         }
                     }
+                    if (url.ToLower().Contains("w3.org"))
+                    {
+                        return urlfirst;
+                    }
+                    if (url.ToLower().Contains("ogp.me"))
+                    {
+                        return urlfirst;
+                    }
+                    url = rcUrl(url);
+                    demurl++;
+                    urlfirst = url;
+                    Console.WriteLine("============================================== End =============================================");
+                    Console.WriteLine("url " + url);
+
+                    urlendredirect = url;
+                    string username = "";
+                    string pass = "";
+
+                    username = "tieuhuy";
+                    pass = "anhhuydeptrai1";
+
+
+                    ModeRequest md = ChkRequest(url, useragent, array[0], array[1], username, pass, startTime);
+
+                    string redirectUrl = md.RedirectUrl;
+
+                    Console.WriteLine("redirectURL " + redirectUrl);
+                    if (redirectUrl != "")
+                    {
+                        string rdUrl = IsUrlSuccess(redirectUrl);
+                        if (rdUrl != "")
+                        {
+                            return rdUrl;
+                        }
+                        else
+                        {
+                            url = redirectUrl;
+                            goto B1;
+                        }
+                    }
+                    else
+                    {
+                        string body = IsUrlValid(md.Body);
+                        Console.WriteLine("Body " + body);
+                        Console.WriteLine("============================================== End =============================================");
+                        string rdUrl = IsUrlSuccess(body);
+                        if (rdUrl != "")
+                        {
+                            return rdUrl;
+                        }
+                        else
+                        {
+                            if (body != "")
+                            {
+                                url = body;
+                                goto B1;
+                            }
+                            else
+                            {
+
+                                return url ;
+                            }
+                        }
+                    }
                 }
-
-
-          
-
+                return url;
             }
-            return url;
+            catch
+            {
+                return url;
+            }
+         
         }
         public static string GetRandomIp()
         {

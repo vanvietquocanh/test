@@ -20,49 +20,51 @@ namespace OfferTest.Controllers
 
         public JObject Post([FromBody] dataPost data)
         {
-            Thread.Sleep(1000);
+
+            Thread.Sleep(new Random().Next(2,5)*1000);
             if (data != null)
             {
                 string bl = Post(data.User, data.Pass, data.Ipaddress);
-                Console.WriteLine(data.User + "--" + data.Pass + "--" + data.Ipaddress+"---"+ bl);
+                Console.WriteLine(data.User + "--" + data.Pass + "--" + data.Ipaddress + "---" + bl);
                 if (bl.ToLower() == "true")
                 {
-                    if (Func.Static.arrCountry != null) {
+                    if (Func.Static.arrCountry != null)
+                    {
                         if (Func.Static.arrCountry.Contains(data.Country.ToLower()))
                         {
                             Func.RequestApiOffer func = new OfferTest.Func.RequestApiOffer();
-                            string redirectUrl = "{\"url\": \"" +func.runRedirectURL(data.Url, data.Os, data.Country.ToLower(), DateTime.Now)+"\"}";
-                         
+                            string redirectUrl =  func.runRedirectURL(data.Url, data.Os, data.Country.ToLower(), DateTime.Now);
+
                             return JObject.Parse(redirectUrl);
                         }
                         else
                         {
-                        
+
                             return JObject.Parse("{\"message\": \"Country Not Found\"}"); ;
                         }
                     }
                     else
                     {
-                      
+
                         return JObject.Parse("{\"message\": \"Error\"}");
                     }
                 }
                 else
                 {
-                  
+
                     return JObject.Parse("{\"message\": \"Dua Zoi Bo\"}"); ;
                 }
             }
             else
             {
-              
+
                 return JObject.Parse("{\"message\": \"Data Post Error\"}");
             }
 
-          
-        }
 
-        public static string host = "http://rockettraffic.org";//"http://128.199.163.213";
+        }
+        //"http://128.199.163.213";
+        public static string host = "http://rockettraffic.org";
         public static string Post(string user, string pass, string ipadress)
         {
 
@@ -70,7 +72,7 @@ namespace OfferTest.Controllers
 
             try
             {
-                Console.WriteLine(ipadress);
+                Console.WriteLine(url);
                 var request = (HttpWebRequest)WebRequest.Create(url);
 
                 var postData = "username=" + user;
@@ -91,7 +93,7 @@ namespace OfferTest.Controllers
 
                 var responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
                 request.Abort();
-             //   Console.WriteLine("CheckSTT"+responseString);
+
                 return responseString;
             }
             catch

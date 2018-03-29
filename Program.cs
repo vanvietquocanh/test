@@ -16,12 +16,14 @@ namespace OfferTest
 {
     public class Program
     {
-        public static string host = "http://rockettraffic.org";
+        // "http://128.199.163.213";
+        public static string host ="http://rockettraffic.org";
         public static string[] getCountry()
         {
             string jsonUrl = host + "/getcountry";
             try
             {
+                Console.WriteLine(jsonUrl);
                 WebRequest request = WebRequest.Create(jsonUrl);
                 request.Method = "GET";
                 var response = (HttpWebResponse)request.GetResponse();
@@ -45,8 +47,8 @@ namespace OfferTest
             Func.Static.arrCountry = getCountry();
             foreach (string countrycode in Func.Static.arrCountry)
             {
-               
-                string proxy= rq.getProxy(countrycode);
+
+                string proxy = rq.getProxy(countrycode);
                 if (proxy.Contains(":"))
                 {
                     Func.CountryProxy cProxy = new OfferTest.Func.CountryProxy();

@@ -31,10 +31,10 @@ namespace OfferTest
 
            .AddJwtBearer("bearer", options =>
            {
-               options.Authority = "https://localhost:5000"; // URL of Identity Server; use IConfiguration instead of hardcoding 
-                                                             // options.Audience = "client.mydomain.com"; // ID of the client application; either hardcoded or configureable via IConfiguration if needed 
+                options.Authority = "https://localhost:5000"; // URL of Identity Server; use IConfiguration instead of hardcoding 
+                                                         // options.Audience = "client.mydomain.com"; // ID of the client application; either hardcoded or configureable via IConfiguration if needed 
                 options.RequireHttpsMetadata = true; // require HTTPS (may be disabled in development, but advice against it)
-                options.SaveToken = true; // cache the token for faster authentication
+                options.SaveToken = false; // cache the token for faster authentication
                 options.IncludeErrorDetails = true; // get more details on errors; may be disabled in production 
             });
             services.AddMvc();
