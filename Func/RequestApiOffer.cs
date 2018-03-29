@@ -132,7 +132,7 @@ namespace OfferTest.Func
                     Thread.Sleep(5000);
                     goto Brq;
                 }
-                //  Console.WriteLine(username + "----" + password);
+                //  //Console.WriteLine(username + "----" + password);
                 if (socksName != "" && socksPort != "")
                 {
                     http.SocksHostname = socksName;//"62.210.220.176"; 
@@ -154,15 +154,15 @@ namespace OfferTest.Func
                 Thread.Sleep(new Random().Next(2, 5) * 1000);
                 html = http.QuickGetStr(url);
 
-                //  Console.WriteLine(http.LastErrorText);
+                //  //Console.WriteLine(http.LastErrorText);
                 if (http.LastMethodSuccess != true)
                 {
-                    //   Console.WriteLine("--------------- LastErrorText ------------------");
+                    //   //Console.WriteLine("--------------- LastErrorText ------------------");
 
 
                 }
-                // Console.WriteLine("============================================== Begin =============================================");
-                //  Console.WriteLine("LastResponseHeader: " + http.LastResponseHeader);
+                // //Console.WriteLine("============================================== Begin =============================================");
+                //  //Console.WriteLine("LastResponseHeader: " + http.LastResponseHeader);
                 //foreach (string header in http.LastResponseHeader.Split(new string[] { "\n" }, StringSplitOptions.None))
                 //{
 
@@ -173,13 +173,13 @@ namespace OfferTest.Func
                 //        md.Urllocation = header.Replace("Location: ", "");
                 //    }
                 //}
-                //   Console.WriteLine("LastHeader: " + http.LastHeader);
+                //   //Console.WriteLine("LastHeader: " + http.LastHeader);
                 md.Body = http.LastResponseBody;
                 md.RedirectUrl = http.FinalRedirectUrl;
-                //Console.WriteLine("Localtion: " + md.Urllocation);
-                //Console.WriteLine("============================================== Begin =============================================");
-                //Console.WriteLine("Body: " + md.Body);
-                //Console.WriteLine("RedirectUrl: " + md.RedirectUrl);
+                ////Console.WriteLine("Localtion: " + md.Urllocation);
+                ////Console.WriteLine("============================================== Begin =============================================");
+                ////Console.WriteLine("Body: " + md.Body);
+                ////Console.WriteLine("RedirectUrl: " + md.RedirectUrl);
                 http.CloseAllConnections();
                 http.CloseAllConnectionsAsync();
                 return md;
@@ -240,7 +240,7 @@ namespace OfferTest.Func
         //    bool success = chilkatGlob.UnlockBundle("ADVRGL.CB1122018_CdZ5Qrc24DmP");
         //    if (success != true)
         //    {
-        //        Console.WriteLine(chilkatGlob.LastErrorText);
+        //        //Console.WriteLine(chilkatGlob.LastErrorText);
         //        return "";
         //    }
 
@@ -260,7 +260,7 @@ namespace OfferTest.Func
         //        {
 
         //            string sshHostname = arruserSSH[0];
-        //            Console.WriteLine(sshHostname);
+        //            //Console.WriteLine(sshHostname);
         //            int sshPort = 22;
         //            tunnel.IdleTimeoutMs = 4000;
         //            tunnel.ConnectTimeoutMs = 4000;
@@ -397,13 +397,13 @@ namespace OfferTest.Func
                 http1.FollowRedirects = false;
 
                 html = http1.QuickGetStr("http://google.com");
-                Console.WriteLine("Proxy:"+http1.LastMethodSuccess);
+                //Console.WriteLine("Proxy:"+http1.LastMethodSuccess);
 
                 if (http1.LastMethodSuccess != true)
                 {
            
                     return http1.LastMethodSuccess;
-                    // Console.WriteLine(http.LastErrorText);
+                    // //Console.WriteLine(http.LastErrorText);
 
                 }
                 http1.CloseAllConnections();
@@ -422,7 +422,7 @@ namespace OfferTest.Func
                bool success = http.UnlockComponent("ADVRGL.CB1122018_CdZ5Qrc24DmP");
                 if (success != true)
                 {
-                    // Console.WriteLine(http.LastErrorText);
+                    // //Console.WriteLine(http.LastErrorText);
                 }
                 string proxy = "Timeout Connect Proxy";
                 foreach (Func.CountryProxy cProxy in Func.Static.lsCountryProxy)
@@ -433,17 +433,17 @@ namespace OfferTest.Func
                     }
                 }
                 // getProxy(countrycode); //"62.210.220.176:4274";
-                Console.WriteLine("Proxy:" + proxy);
+                //Console.WriteLine("Proxy:" + proxy);
                 if (proxy != "Timeout Connect Proxy")
                 {
                     //  string[] arr = proxy.Split(':');
-                    // Console.WriteLine(checkProxyLive(arr[0],arr[1],"tieuhuy","anhhuydeptrai1"));
+                    // //Console.WriteLine(checkProxyLive(arr[0],arr[1],"tieuhuy","anhhuydeptrai1"));
                     string[] array = proxy.Split(':');
-                    Console.WriteLine(array.Length);
+                    //Console.WriteLine(array.Length);
                     if (array.Length - 1 == 1)
                     {
                         string url1 = getRedirectUrl(url, os, countrycode, startTime, array);
-                        Console.WriteLine("URl END" + url1);
+                        //Console.WriteLine("URl END" + url1);
                         if (url1 != "")
                         {
                             return "{\"message\": \""+ url1 + "\",\"Count\": \""+ demurl + "\",\"TimeOut\": \"false\"}";
@@ -499,7 +499,7 @@ namespace OfferTest.Func
                     string urlfirst = "";
                     B1:
                  
-                  //  Console.WriteLine(int.Parse(DateTime.Now.Subtract(startTime).TotalSeconds.ToString().Split('.')[0]));
+                  //  //Console.WriteLine(int.Parse(DateTime.Now.Subtract(startTime).TotalSeconds.ToString().Split('.')[0]));
                     if (int.Parse(DateTime.Now.Subtract(startTime).TotalSeconds.ToString().Split('.')[0]) > 200)
                     {
                         return url + "-timeout";
@@ -509,7 +509,7 @@ namespace OfferTest.Func
                     {
                         if (url.ToLower().Contains("id"))
                         {
-                          //  Console.WriteLine("returnurl" + url);
+                          //  //Console.WriteLine("returnurl" + url);
                             return url;
                         }
                     }
@@ -524,8 +524,8 @@ namespace OfferTest.Func
                     url = rcUrl(url);
                     demurl++;
                     urlfirst = url;
-                //    Console.WriteLine("============================================== End =============================================");
-                    Console.WriteLine("url " + url);
+                //    //Console.WriteLine("============================================== End =============================================");
+                    //Console.WriteLine("url " + url);
 
                     urlendredirect = url;
                     string username = "";
@@ -539,7 +539,7 @@ namespace OfferTest.Func
 
                     string redirectUrl = md.RedirectUrl;
 
-             //       Console.WriteLine("redirectURL " + redirectUrl);
+             //       //Console.WriteLine("redirectURL " + redirectUrl);
                     if (redirectUrl != "")
                     {
                         string rdUrl = IsUrlSuccess(redirectUrl);
@@ -556,8 +556,8 @@ namespace OfferTest.Func
                     else
                     {
                         string body = IsUrlValid(md.Body);
-                     //   Console.WriteLine("Body " + body);
-                     //   Console.WriteLine("============================================== End =============================================");
+                     //   //Console.WriteLine("Body " + body);
+                     //   //Console.WriteLine("============================================== End =============================================");
                         string rdUrl = IsUrlSuccess(body);
                         if (rdUrl != "")
                         {
@@ -670,7 +670,7 @@ namespace OfferTest.Func
 
                     var responseString = Encoding.Default.GetString(response);
                     JObject jObject = JObject.Parse(responseString);
-                    Console.WriteLine("Get ICON " + responseString);
+                    //Console.WriteLine("Get ICON " + responseString);
                     if ((string)jObject["message"] != "error")
                     {
 

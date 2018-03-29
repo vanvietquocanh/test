@@ -84,7 +84,7 @@ namespace OfferTest.Controllers
 
             try
             {
-                Console.WriteLine(url);
+               // Console.WriteLine(url);
                 var request = (HttpWebRequest)WebRequest.Create(url);
 
                 var postData = "username=" + user;
