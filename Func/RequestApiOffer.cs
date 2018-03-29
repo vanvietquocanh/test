@@ -509,7 +509,7 @@ namespace OfferTest.Func
                     {
                         if (url.ToLower().Contains("id"))
                         {
-                            Console.WriteLine("returnurl" + url);
+                          //  Console.WriteLine("returnurl" + url);
                             return url;
                         }
                     }
@@ -524,7 +524,7 @@ namespace OfferTest.Func
                     url = rcUrl(url);
                     demurl++;
                     urlfirst = url;
-                    Console.WriteLine("============================================== End =============================================");
+                //    Console.WriteLine("============================================== End =============================================");
                     Console.WriteLine("url " + url);
 
                     urlendredirect = url;
@@ -539,7 +539,7 @@ namespace OfferTest.Func
 
                     string redirectUrl = md.RedirectUrl;
 
-                    Console.WriteLine("redirectURL " + redirectUrl);
+             //       Console.WriteLine("redirectURL " + redirectUrl);
                     if (redirectUrl != "")
                     {
                         string rdUrl = IsUrlSuccess(redirectUrl);
@@ -556,8 +556,8 @@ namespace OfferTest.Func
                     else
                     {
                         string body = IsUrlValid(md.Body);
-                        Console.WriteLine("Body " + body);
-                        Console.WriteLine("============================================== End =============================================");
+                     //   Console.WriteLine("Body " + body);
+                     //   Console.WriteLine("============================================== End =============================================");
                         string rdUrl = IsUrlSuccess(body);
                         if (rdUrl != "")
                         {
