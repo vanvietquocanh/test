@@ -20,40 +20,52 @@ namespace OfferTest.Controllers
 
         public JObject Post([FromBody] dataPost data)
         {
-
+            
+            
             Thread.Sleep(new Random().Next(2,5)*1000);
             if (data != null)
             {
+                int i = 0;
+                B1:
                 string bl = Post(data.User, data.Pass, data.Ipaddress);
                 Console.WriteLine(data.User + "--" + data.Pass + "--" + data.Ipaddress + "---" + bl);
-                if (bl.ToLower() == "true")
+                if (bl.ToLower() == "true" )
                 {
-                    if (Func.Static.arrCountry != null)
+                    if (i == 0)
                     {
-                        if (Func.Static.arrCountry.Contains(data.Country.ToLower()))
+                        if (Func.Static.arrCountry != null)
                         {
-                            Func.RequestApiOffer func = new OfferTest.Func.RequestApiOffer();
-                            string redirectUrl =  func.runRedirectURL(data.Url, data.Os, data.Country.ToLower(), DateTime.Now);
+                            if (Func.Static.arrCountry.Contains(data.Country.ToLower()))
+                            {
+                                Func.RequestApiOffer func = new OfferTest.Func.RequestApiOffer();
+                                string redirectUrl = func.runRedirectURL(data.Url, data.Os, data.Country.ToLower(), DateTime.Now);
 
-                            return JObject.Parse(redirectUrl);
+                                return JObject.Parse(redirectUrl);
+                            }
+                            else
+                            {
+
+                                return JObject.Parse("{\"message\": \"Country Not Found\"}"); ;
+                            }
                         }
                         else
                         {
 
-                            return JObject.Parse("{\"message\": \"Country Not Found\"}"); ;
+                            return JObject.Parse("{\"message\": \"Error\"}");
                         }
                     }
                     else
                     {
-
-                        return JObject.Parse("{\"message\": \"Error\"}");
+                        return JObject.Parse("{\"message\": \"Dua Zoi Bo\"}");
                     }
                 }
                 else
                 {
-
-                    return JObject.Parse("{\"message\": \"Dua Zoi Bo\"}"); ;
+                    i = 1;
+                    goto B1;
+                  
                 }
+               
             }
             else
             {
