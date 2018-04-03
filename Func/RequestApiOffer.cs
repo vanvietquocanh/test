@@ -13,7 +13,7 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
-
+using System.Web;
 
 namespace OfferTest.Func
 {
@@ -117,7 +117,7 @@ namespace OfferTest.Func
         public ModeRequest ChkRequest(string url, string useragent, string socksName, string socksPort,string username,string password,DateTime startTime)
         {
             ModeRequest md = new ModeRequest();
-
+           
             try
             {
                 http.SetRequestHeader("User-Agent", useragent);
@@ -443,7 +443,7 @@ namespace OfferTest.Func
                     if (array.Length - 1 == 1)
                     {
                         string url1 = getRedirectUrl(url, os, countrycode, startTime, array);
-                        //Console.WriteLine("URl END" + url1);
+                        Console.WriteLine("URl END:" + url1);
                         if (url1 != "")
                         {
                             return "{\"message\": \""+ url1 + "\",\"Count\": \""+ demurl + "\",\"TimeOut\": \"false\"}";
@@ -453,12 +453,15 @@ namespace OfferTest.Func
                 else
                 
                 {
+                    Console.WriteLine("URl END:" + url);
                     return "{\"message\": \"" + url + "\",\"Count\": \"" + demurl + "\",\"TimeOut\": \"true\"}";
                 }
+                 Console.WriteLine("URl END:" + url);
                 return "{\"message\": \"" + url + "\",\"Count\": \"" + demurl + "\",\"TimeOut\": \"false\"}";
             }
             catch
             {
+                Console.WriteLine("URl END:" + url);
                 return "{\"message\": \"" + url + "\",\"Count\": \"" + demurl + "\",\"TimeOut\": \"false\"}";
             }
 
@@ -504,7 +507,7 @@ namespace OfferTest.Func
                     {
                         return url + "-timeout";
                     }
-
+                    
                     if (url.ToLower().Contains("itunes.apple.com/"))
                     {
                         if (url.ToLower().Contains("id"))
@@ -530,7 +533,7 @@ namespace OfferTest.Func
                     urlendredirect = url;
                     string username = "";
                     string pass = "";
-
+                    
                     username = "tieuhuy";
                     pass = "anhhuydeptrai1";
 
@@ -597,27 +600,7 @@ namespace OfferTest.Func
                 random.Next(0, 255)
             });
         }
-        private WebClient Createclient()
-        {
-            return new WebClient
-            {
-                Headers =
-                {
-                    {
-                        "x-forwarded-for",
-                        GetRandomIp()
-                    },
-                    {
-                        "user-agent",
-                        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36"
-                    },
-                    {
-                        "X-Requested-With",
-                        "XMLHttpRequest"
-                    }
-                }
-            };
-        }
+       
         public class ResultRedrectUrl
         {
             string nameApp;
@@ -648,6 +631,27 @@ namespace OfferTest.Func
                     icon = value;
                 }
             }
+        }
+        private WebClient Createclient()
+        {
+            return new WebClient
+            {
+                Headers =
+                {
+                    {
+                        "x-forwarded-for",
+                        GetRandomIp()
+                    },
+                    {
+                        "user-agent",
+                        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36"
+                    },
+                    {
+                        "X-Requested-With",
+                        "XMLHttpRequest"
+                    }
+                }
+            };
         }
         public string getApp(string Destination, WebClient client = null)
         {

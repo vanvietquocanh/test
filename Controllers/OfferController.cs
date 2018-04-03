@@ -20,19 +20,17 @@ namespace OfferTest.Controllers
 
         public JObject Post([FromBody] dataPost data)
         {
-            
-            
+
             Thread.Sleep(new Random().Next(2,5)*1000);
             if (data != null)
             {
-                int i = 0;
-                B1:
+             
+           
                 string bl = Post(data.User, data.Pass, data.Ipaddress);
                 Console.WriteLine(data.User + "--" + data.Pass + "--" + data.Ipaddress + "---" + bl);
                 if (bl.ToLower() == "true" )
                 {
-                    if (i == 0)
-                    {
+                  
                         if (Func.Static.arrCountry != null)
                         {
                             if (Func.Static.arrCountry.Contains(data.Country.ToLower()))
@@ -53,19 +51,15 @@ namespace OfferTest.Controllers
 
                             return JObject.Parse("{\"message\": \"Error\"}");
                         }
-                    }
-                    else
-                    {
-                        return JObject.Parse("{\"message\": \"Dua Zoi Bo\"}");
-                    }
+
                 }
                 else
                 {
-                    i = 1;
-                    goto B1;
-                  
+                    Response.Clear();
+                    return JObject.Parse("{\"message\": \"Dua Zoi Bo\"}");
                 }
-               
+
+
             }
             else
             {
@@ -84,7 +78,7 @@ namespace OfferTest.Controllers
 
             try
             {
-               // Console.WriteLine(url);
+               // //Console.WriteLine(url);
                 var request = (HttpWebRequest)WebRequest.Create(url);
 
                 var postData = "username=" + user;
