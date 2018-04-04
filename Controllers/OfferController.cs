@@ -17,7 +17,7 @@ namespace OfferTest.Controllers
     [Route("api/Offer")]
     public class OfferController : Controller
     {
-
+        // "{\"message\": \""+ url1 + "\",\"Count\": \""+ demurl + "\",\"TimeOut\": \"false\"}";
         public JObject Post([FromBody] dataPost data)
         {
 
@@ -27,7 +27,7 @@ namespace OfferTest.Controllers
              
            
                 string bl = Post(data.User, data.Pass, data.Ipaddress);
-                Console.WriteLine(data.User + "--" + data.Pass + "--" + data.Ipaddress + "---" + bl);
+                Console.WriteLine(data.User + "--" + data.Pass + "--" + data.Ipaddress + "---" + bl );
                 if (bl.ToLower() == "true" )
                 {
                   
@@ -37,8 +37,29 @@ namespace OfferTest.Controllers
                             {
                                 Func.RequestApiOffer func = new OfferTest.Func.RequestApiOffer();
                                 string redirectUrl = func.runRedirectURL(data.Url, data.Os, data.Country.ToLower(), DateTime.Now);
-
-                                return JObject.Parse(redirectUrl);
+                                string[] arrRs = redirectUrl.Split('|');
+                                string rs = "{\"message\": \"" + arrRs[0] + "\",\"Count\": \"" + arrRs[1] + "\",\"TimeOut\": \""+ arrRs[2]+ "\"}";
+                              
+                                if (data.Domain == "host")
+                                {
+                                    return JObject.Parse(rs);
+                                }
+                                else
+                                {
+                                    Console.WriteLine(data.Domain);
+                                    if (arrRs[0].ToLower().Contains("market") || arrRs[0].ToLower().Contains("itunes.apple.com") || arrRs[0].ToLower().Contains("play.google.com"))
+                                    {
+                                       
+                                        Console.WriteLine(addDB(data.Url.ToLower().Replace("&","+"), data.Os.ToLower().Trim(), data.Country.ToLower().Trim(), arrRs[0].Replace("&", "+"), arrRs[1], "success"));
+                                        return JObject.Parse(rs);
+                                        
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine(addDB(data.Url.ToLower().Replace("&", "+"), data.Os.ToLower().Trim(), data.Country.ToLower().Trim(), arrRs[0].Replace("&", "+"), arrRs[1], "fail"));
+                                        return JObject.Parse(rs);
+                                    }
+                                }
                             }
                             else
                             {
@@ -69,6 +90,51 @@ namespace OfferTest.Controllers
 
 
         }
+
+
+
+        public static string addDB(string url,string os,string country,string lead,string count,string status)
+        {
+
+            string uri = host + "/insert/links";
+
+            try
+            {
+                // //Console.WriteLine(url);
+                var request = (HttpWebRequest)WebRequest.Create(uri);
+
+                var postData = "url=" + url;
+                postData += "&os=" +  os;
+                postData += "&country=" + country;
+                postData += "&lead=" + lead;
+                postData += "&count=" + count;
+                postData += "&status=" + status;
+                var data = Encoding.ASCII.GetBytes(postData);
+
+                request.Method = "POST";
+                request.ContentType = "application/x-www-form-urlencoded";
+                request.ContentLength = data.Length;
+
+                using (var stream = request.GetRequestStream())
+                {
+                    stream.Write(data, 0, data.Length);
+                }
+
+                var response = (HttpWebResponse)request.GetResponse();
+
+                var responseString = new StreamReader(response.GetResponseStream()).ReadToEnd();
+                request.Abort();
+
+                return responseString;
+            }
+            catch
+            {
+                return "";
+            }
+
+
+        }
+
         //"http://128.199.163.213";
         public static string host = "http://rockettraffic.org";
         public static string Post(string user, string pass, string ipadress)
@@ -117,7 +183,19 @@ namespace OfferTest.Controllers
             string user;
             string pass;
             string ipaddress;
-           
+            string domain;
+            public string Domain
+            {
+                get
+                {
+                    return domain;
+                }
+
+                set
+                {
+                    domain = value;
+                }
+            }
             public string User
             {
                 get

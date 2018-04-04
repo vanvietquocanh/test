@@ -446,7 +446,7 @@ namespace OfferTest.Func
                         Console.WriteLine("URl END:" + url1);
                         if (url1 != "")
                         {
-                            return "{\"message\": \""+ url1 + "\",\"Count\": \""+ demurl + "\",\"TimeOut\": \"false\"}";
+                            return  url1 + "|"+ demurl +"|false";
                         }
                     }
                 }
@@ -454,15 +454,15 @@ namespace OfferTest.Func
                 
                 {
                     Console.WriteLine("URl END:" + url);
-                    return "{\"message\": \"" + url + "\",\"Count\": \"" + demurl + "\",\"TimeOut\": \"true\"}";
+                    return url + "|" + demurl + "|true";
                 }
-                 Console.WriteLine("URl END:" + url);
-                return "{\"message\": \"" + url + "\",\"Count\": \"" + demurl + "\",\"TimeOut\": \"false\"}";
+                Console.WriteLine("URl END:" + url);
+                return url + "|" + demurl + "|false";
             }
             catch
             {
                 Console.WriteLine("URl END:" + url);
-                return "{\"message\": \"" + url + "\",\"Count\": \"" + demurl + "\",\"TimeOut\": \"false\"}";
+                return url + "|" + demurl + "|false";
             }
 
         }
