@@ -13,8 +13,6 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 
-using System.Web;
-
 namespace OfferTest.Func
 {
     public class RequestApiOffer
@@ -89,7 +87,7 @@ namespace OfferTest.Func
         public string checkUrl303(string str)
         {
             Chilkat.Http hh = new Chilkat.Http();
-         
+
             int lenghtstr = str.Length;
             foreach (string url in hh.GetUrlPath(str).Split('/'))
             {
@@ -103,7 +101,7 @@ namespace OfferTest.Func
                     {
                         PingReply reply = p.Send(url, 3000);
                         if (reply.Status == IPStatus.Success)
-                            return "http://"+ str.Substring(ncount, lenghtstr - ncount);
+                            return "http://" + str.Substring(ncount, lenghtstr - ncount);
                     }
                     catch { }
 
@@ -113,11 +111,11 @@ namespace OfferTest.Func
             return "";
         }
         Http http = new Http();
-   
-        public ModeRequest ChkRequest(string url, string useragent, string socksName, string socksPort,string username,string password,DateTime startTime)
+
+        public ModeRequest ChkRequest(string url, string useragent, string socksName, string socksPort, string username, string password, DateTime startTime)
         {
             ModeRequest md = new ModeRequest();
-           
+
             try
             {
                 http.SetRequestHeader("User-Agent", useragent);
@@ -145,7 +143,7 @@ namespace OfferTest.Func
                 http.S3Ssl = true;
                 http.SslProtocol = "TLS 1.2";
 
-              
+
 
                 string html;
                 http.SaveCookies = true;
@@ -204,7 +202,7 @@ namespace OfferTest.Func
                 myRequest.Abort();
             }
             catch { }
-    
+
             return jsonResponse;
         }
         // "http://128.199.163.213";
@@ -213,7 +211,7 @@ namespace OfferTest.Func
         {
             try
             {
-                string jsonUrl = hostApi+ "/get/port?country=" + countryCode.ToLower();
+                string jsonUrl = hostApi + "/get/port?country=" + countryCode.ToLower();
                 WebRequest request = WebRequest.Create(jsonUrl);
                 request.Method = "GET";
                 request.ContentType = "application/json; charset=utf-8";
@@ -401,7 +399,7 @@ namespace OfferTest.Func
 
                 if (http1.LastMethodSuccess != true)
                 {
-           
+
                     return http1.LastMethodSuccess;
                     // //Console.WriteLine(http.LastErrorText);
 
@@ -419,7 +417,7 @@ namespace OfferTest.Func
         {
             try
             {
-               bool success = http.UnlockComponent("ADVRGL.CB1122018_CdZ5Qrc24DmP");
+                bool success = http.UnlockComponent("ADVRGL.CB1122018_CdZ5Qrc24DmP");
                 if (success != true)
                 {
                     // //Console.WriteLine(http.LastErrorText);
@@ -446,12 +444,12 @@ namespace OfferTest.Func
                         Console.WriteLine("URl END:" + url1);
                         if (url1 != "")
                         {
-                            return  url1 + "|"+ demurl +"|false";
+                            return url1 + "|" + demurl + "|false";
                         }
                     }
                 }
                 else
-                
+
                 {
                     Console.WriteLine("URl END:" + url);
                     return url + "|" + demurl + "|true";
@@ -472,7 +470,7 @@ namespace OfferTest.Func
             string str = checkUrl303(url);
             if (str != "")
             {
-                return  str;
+                return str;
             }
             int index = url.IndexOf("'");
             if (index > 0)
@@ -501,18 +499,18 @@ namespace OfferTest.Func
                 {
                     string urlfirst = "";
                     B1:
-                 
-                  //  //Console.WriteLine(int.Parse(DateTime.Now.Subtract(startTime).TotalSeconds.ToString().Split('.')[0]));
+
+                    //  //Console.WriteLine(int.Parse(DateTime.Now.Subtract(startTime).TotalSeconds.ToString().Split('.')[0]));
                     if (int.Parse(DateTime.Now.Subtract(startTime).TotalSeconds.ToString().Split('.')[0]) > 200)
                     {
                         return url + "-timeout";
                     }
-                    
+
                     if (url.ToLower().Contains("itunes.apple.com/"))
                     {
                         if (url.ToLower().Contains("id"))
                         {
-                          //  //Console.WriteLine("returnurl" + url);
+                            //  //Console.WriteLine("returnurl" + url);
                             return url;
                         }
                     }
@@ -527,13 +525,13 @@ namespace OfferTest.Func
                     url = rcUrl(url);
                     demurl++;
                     urlfirst = url;
-                //    //Console.WriteLine("============================================== End =============================================");
+                    //    //Console.WriteLine("============================================== End =============================================");
                     //Console.WriteLine("url " + url);
 
                     urlendredirect = url;
                     string username = "";
                     string pass = "";
-                    
+
                     username = "tieuhuy";
                     pass = "anhhuydeptrai1";
 
@@ -542,7 +540,7 @@ namespace OfferTest.Func
 
                     string redirectUrl = md.RedirectUrl;
 
-             //       //Console.WriteLine("redirectURL " + redirectUrl);
+                    //       //Console.WriteLine("redirectURL " + redirectUrl);
                     if (redirectUrl != "")
                     {
                         string rdUrl = IsUrlSuccess(redirectUrl);
@@ -559,8 +557,8 @@ namespace OfferTest.Func
                     else
                     {
                         string body = IsUrlValid(md.Body);
-                     //   //Console.WriteLine("Body " + body);
-                     //   //Console.WriteLine("============================================== End =============================================");
+                        //   //Console.WriteLine("Body " + body);
+                        //   //Console.WriteLine("============================================== End =============================================");
                         string rdUrl = IsUrlSuccess(body);
                         if (rdUrl != "")
                         {
@@ -576,7 +574,7 @@ namespace OfferTest.Func
                             else
                             {
 
-                                return url ;
+                                return url;
                             }
                         }
                     }
@@ -587,7 +585,7 @@ namespace OfferTest.Func
             {
                 return url;
             }
-         
+
         }
         public static string GetRandomIp()
         {
@@ -600,7 +598,7 @@ namespace OfferTest.Func
                 random.Next(0, 255)
             });
         }
-       
+
         public class ResultRedrectUrl
         {
             string nameApp;
@@ -680,7 +678,7 @@ namespace OfferTest.Func
 
                         string NameApp = ((string)jObject["title"]).Trim();
                         string Icon = ((string)jObject["icon"]).Trim();
-                        string rs = "{ 'message':'Success' ,'NameApp': '" + NameApp + "','Icon': '" + Icon + "','Url':'" + Destination + "','Count': '" + demurl + "'}" ;
+                        string rs = "{ 'message':'Success' ,'NameApp': '" + NameApp + "','Icon': '" + Icon + "','Url':'" + Destination + "','Count': '" + demurl + "'}";
                         return rs;
                     }
                     try
@@ -701,7 +699,7 @@ namespace OfferTest.Func
                 }
 
             }
-            catch 
+            catch
             {
                 try
                 {

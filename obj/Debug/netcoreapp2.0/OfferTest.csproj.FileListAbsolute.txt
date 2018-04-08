@@ -1,11 +1,11 @@
-D:\Tool\Project Create C\ASP.net\OfferTest\OfferTest\bin\Debug\netcoreapp2.0\OfferTest.deps.json
-D:\Tool\Project Create C\ASP.net\OfferTest\OfferTest\bin\Debug\netcoreapp2.0\OfferTest.runtimeconfig.json
-D:\Tool\Project Create C\ASP.net\OfferTest\OfferTest\bin\Debug\netcoreapp2.0\OfferTest.runtimeconfig.dev.json
-D:\Tool\Project Create C\ASP.net\OfferTest\OfferTest\bin\Debug\netcoreapp2.0\OfferTest.dll
-D:\Tool\Project Create C\ASP.net\OfferTest\OfferTest\bin\Debug\netcoreapp2.0\OfferTest.pdb
-D:\Tool\Project Create C\ASP.net\OfferTest\OfferTest\obj\Debug\netcoreapp2.0\OfferTest.csproj.CoreCompileInputs.cache
-D:\Tool\Project Create C\ASP.net\OfferTest\OfferTest\obj\Debug\netcoreapp2.0\OfferTest.AssemblyInfoInputs.cache
-D:\Tool\Project Create C\ASP.net\OfferTest\OfferTest\obj\Debug\netcoreapp2.0\OfferTest.AssemblyInfo.cs
-D:\Tool\Project Create C\ASP.net\OfferTest\OfferTest\obj\Debug\netcoreapp2.0\OfferTest.dll
-D:\Tool\Project Create C\ASP.net\OfferTest\OfferTest\obj\Debug\netcoreapp2.0\OfferTest.pdb
-D:\Tool\Project Create C\ASP.net\OfferTest\OfferTest\obj\Debug\netcoreapp2.0\OfferTest.csprojResolveAssemblyReference.cache
+C:\Users\PC-Nokia\source\repos\WebApplication2\OfferTest\OfferTest\bin\Debug\netcoreapp2.0\OfferTest.deps.json
+C:\Users\PC-Nokia\source\repos\WebApplication2\OfferTest\OfferTest\bin\Debug\netcoreapp2.0\OfferTest.runtimeconfig.json
+C:\Users\PC-Nokia\source\repos\WebApplication2\OfferTest\OfferTest\bin\Debug\netcoreapp2.0\OfferTest.runtimeconfig.dev.json
+C:\Users\PC-Nokia\source\repos\WebApplication2\OfferTest\OfferTest\bin\Debug\netcoreapp2.0\OfferTest.dll
+C:\Users\PC-Nokia\source\repos\WebApplication2\OfferTest\OfferTest\obj\Debug\netcoreapp2.0\OfferTest.csprojResolveAssemblyReference.cache
+C:\Users\PC-Nokia\source\repos\WebApplication2\OfferTest\OfferTest\obj\Debug\netcoreapp2.0\OfferTest.csproj.CoreCompileInputs.cache
+C:\Users\PC-Nokia\source\repos\WebApplication2\OfferTest\OfferTest\obj\Debug\netcoreapp2.0\OfferTest.AssemblyInfoInputs.cache
+C:\Users\PC-Nokia\source\repos\WebApplication2\OfferTest\OfferTest\obj\Debug\netcoreapp2.0\OfferTest.AssemblyInfo.cs
+C:\Users\PC-Nokia\source\repos\WebApplication2\OfferTest\OfferTest\bin\Debug\netcoreapp2.0\OfferTest.pdb
+C:\Users\PC-Nokia\source\repos\WebApplication2\OfferTest\OfferTest\obj\Debug\netcoreapp2.0\OfferTest.dll
+C:\Users\PC-Nokia\source\repos\WebApplication2\OfferTest\OfferTest\obj\Debug\netcoreapp2.0\OfferTest.pdb
