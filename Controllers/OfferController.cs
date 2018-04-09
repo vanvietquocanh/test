@@ -25,8 +25,8 @@ namespace OfferTest.Controllers
             {
 
 
-                string bl = Post(data.User, data.Pass, data.Ipaddress);
-                Console.WriteLine(data.User + "--" + data.Pass + "--" + data.Ipaddress + "---" + bl + "---" + data.Domain);
+                string bl = Post(data.Domain, data.User, data.Pass, data.Ipaddress);
+                Console.WriteLine(data.User + "--" + data.Pass + "--" + data.Ipaddress + "---" + bl + "---" + data.Domain +"---" );
                 if (bl.ToLower() == "true")
                 {
 
@@ -45,18 +45,18 @@ namespace OfferTest.Controllers
                             }
                             else
                             {
-                                host = data.Domain;
+
                                 // Console.WriteLine(data.Domain);
                                 if (arrRs[0].ToLower().Contains("market") || arrRs[0].ToLower().Contains("itunes.apple.com") || arrRs[0].ToLower().Contains("play.google.com"))
                                 {
 
-                                    Console.WriteLine(addDB(data.Url.ToLower().Replace("&", "&amp;"), data.Os.ToLower().Trim(), data.Country.ToLower().Trim(), arrRs[0].Replace("&", "+"), arrRs[1], "success"));
+                                    Console.WriteLine(addDB(data.Domain, data.Url.ToLower().Replace("&", "&amp;"), data.Os.ToLower().Trim(), data.Country.ToLower().Trim(), arrRs[0].Replace("&", "+"), arrRs[1], "success"));
                                     return JObject.Parse(rs);
 
                                 }
                                 else
                                 {
-                                    Console.WriteLine(addDB(data.Url.ToLower().Replace("&", "&amp;"), data.Os.ToLower().Trim(), data.Country.ToLower().Trim(), arrRs[0].Replace("&", "+"), arrRs[1], "fail"));
+                                    Console.WriteLine(addDB(data.Domain, data.Url.ToLower().Replace("&", "&amp;"), data.Os.ToLower().Trim(), data.Country.ToLower().Trim(), arrRs[0].Replace("&", "+"), arrRs[1], "fail"));
                                     return JObject.Parse(rs);
                                 }
                             }
@@ -93,10 +93,10 @@ namespace OfferTest.Controllers
 
 
 
-        public static string addDB(string url, string os, string country, string lead, string count, string status)
+        public static string addDB(string domain, string url, string os, string country, string lead, string count, string status)
         {
 
-            string uri = host + "/insert/links";
+            string uri = domain + "/insert/links";
 
             try
             {
@@ -120,12 +120,11 @@ namespace OfferTest.Controllers
 
         }
 
-        //"http://128.199.163.213";
-        public static string host = "http://rockettraffic.org";
-        public static string Post(string user, string pass, string ipadress)
+
+        public static string Post(string domain, string user, string pass, string ipadress)
         {
 
-            string url = host + "/checkstt";
+            string url = domain + "/checkstt";
 
             try
             {
